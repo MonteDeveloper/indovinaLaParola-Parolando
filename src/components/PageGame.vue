@@ -25,11 +25,10 @@ export default {
     async mounted() {
         await this.game.actions.loadWords();
         this.wordsLoaded = true;
-        console.log(this.game.state.words);
+        this.game.state.wordLength = this.$route.query.letters;
         this.$route.query.challenge ? this.isChallengeMode = true : this.isChallengeMode = false;
         if(this.isChallengeMode){
             this.game.state.challengeCode = this.$route.query.challenge;
-            this.game.state.wordLength = this.$route.query.letters;
             this.game.state.challengeLength = this.$route.query.challengeLength;
             this.game.actions.generateChallenge();
         }else{

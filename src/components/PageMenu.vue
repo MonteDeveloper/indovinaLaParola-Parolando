@@ -83,7 +83,7 @@ export default {
         },
         goToGame() {
             if (this.openSettingsAlone) {
-                this.$router.push({ path: '/game' });
+                this.$router.push({ path: '/game', query: { letters: game.state.wordLength}});
             } else {
                 this.$router.push({ path: '/game', query: { challenge: '123456', letters: game.state.wordLength, challengeLength: game.state.challengeLength } })
             }
