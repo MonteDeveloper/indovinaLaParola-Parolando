@@ -22,7 +22,7 @@ const state = reactive({
   wordsToGuess: [],
   wordLength: 5,
   challengeLength: 5,
-  maxLetters: 8,
+  maxLetters: 7,
   minLetters: 4,
   maxChallengeLength: 10,
   minChallengeLength: 1,

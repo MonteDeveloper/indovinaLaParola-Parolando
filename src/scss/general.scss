@@ -3,4 +3,8 @@
 body {
 	background: linear-gradient(-45deg, $dark, $dark);
 	background-size: 100% 100%;
+	& > *{
+		max-width: 500px;
+		margin: auto;
+	}
 }
