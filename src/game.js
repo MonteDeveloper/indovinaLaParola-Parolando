@@ -24,8 +24,8 @@ const state = reactive({
   challengeLength: 5,
   maxLetters: 8,
   minLetters: 4,
-  maxChallengeLength: 7,
-  minChallengeLength: 2,
+  maxChallengeLength: 10,
+  minChallengeLength: 1,
   challengeCode: null,
   seed: null,
 });

@@ -7,45 +7,71 @@
 
         <!-- PULSANTI -->
         <div class="d-flex justify-content-center align-items-center h-25">
-            <div class="d-flex flex-wrap gap-3 justify-content-center">
-                <button class="btn btn-primary fs-5 p-3" @click="openSettingsAlone = true">GIOCA DA SOLO</button>
-                <button class="btn btn-primary fs-5 p-3" @click="openSettingsChallenge = true">SFIDA
+            <div class="d-flex flex-column gap-3 justify-content-center">
+                <button class="btn btn-warning text-light fs-5 p-3 fw-bold" @click="openSettingsAlone = true"><i class="fa-solid fa-user"></i> GIOCA DA
+                    SOLO</button>
+                <button class="btn btn-primary border border-light text-light text-light fs-5 p-3"
+                    @click="openSettingsChallenge = true"><i class="fa-solid fa-users"></i> SFIDA
                     UN AMICO</button>
             </div>
         </div>
 
         <!-- IMPOSTAZIONI -->
         <transition class="position-relative" name="fade-slide" mode="out-in">
-        <div v-if="openSettingsAlone || openSettingsChallenge" class="bg-dark rounded overflow-hidden p-3 h-50 position-absolute top-50 start-50 translate-middle">
-            <button :disabled="currentSettingSlide === 1" class="btn bg-primary text-light position-absolute top-0 start-0 fs-4 px-4 m-2" @click="previewSettingSlide">I</button>
-            <button class="btn bg-primary text-light position-absolute top-0 end-0 fs-4 px-4 m-2" @click="closeSettings">X</button>
-                <transition class="d-flex align-items-center h-100 py-3"
+            <div v-if="openSettingsAlone || openSettingsChallenge"
+                class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-50 position-absolute top-50 start-50 translate-middle w-100">
+                <div class="w-100 d-flex justify-content-between">
+                    <div class="col-6">
+                        <Transition name="slidesx" mode="in">
+                            <button v-if="currentSettingSlide > 1" class="btn border text-light fs-4 px-4 m-2"
+                                @click="previewSettingSlide"><i class="fa-solid fa-angle-left"></i></button>
+                        </Transition>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        <button class="btn btn-danger text-light fs-4 px-4 m-2" @click="closeSettings"><i
+                                class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <transition class="d-flex align-items-center justify-content-center text-center h-100 py-3"
                     :name="nameDirectionSlide" mode="out-in">
                     <div v-if="currentSettingSlide === 1" key="1">
-                        <div class="d-flex flex-column gap-3 text-light justify-content-center align-items-center">
-                            <h2 class="text-center">NUMERO DI LETTERE</h2>
-                            <div class="d-flex gap-3 align-items-center">
-                                <button class="btn btn-primary p-2 px-3 fs-4" @click="game.actions.decrementWordLength()"
-                                    :disabled="game.state.wordLength <= 4">-</button>
-                                <div class="h-100 fs-4 d-flex align-items-center">{{ game.state.wordLength }}</div>
-                                <button class="btn btn-primary p-2 px-3 fs-4" @click="game.actions.incrementWordLength()"
-                                    :disabled="game.state.wordLength >= 8">+</button>
+                        <div class="d-flex flex-column gap-3 text-light justify-content-between h-100 align-items-center">
+                            <div class="d-flex flex-column gap-3 justify-content-center align-items-center h-100">
+                                <h2 class="text-center">NUMERO DI LETTERE</h2>
+                                <div class="d-flex gap-3 align-items-center">
+                                    <button class="btn border text-light p-2 px-3 fs-4"
+                                        @click="game.actions.decrementWordLength()"
+                                        :disabled="game.state.wordLength <= 4"><i class="fa-solid fa-minus"></i></button>
+                                    <div class="h-100 fs-4 d-flex align-items-center px-3">{{ game.state.wordLength }}</div>
+                                    <button class="btn border text-light p-2 px-3 fs-4"
+                                        @click="game.actions.incrementWordLength()"
+                                        :disabled="game.state.wordLength >= 8"><i class="fa-solid fa-plus"></i></button>
+                                </div>
                             </div>
-                            <button v-if="openSettingsChallenge" class="btn btn-primary fs-5 p-2 px-3 position-absolute bottom-0 start-50 translate-middle" @click="nextSettingSlide">PROSSIMO</button>
-                            <button v-else class="btn btn-primary fs-5 p-2 px-3 position-absolute bottom-0 start-50 translate-middle" @click="goToGame()">CONFERMA</button>
+                            <button v-if="openSettingsChallenge" class="btn btn-light  fs-5 p-2 px-3"
+                                @click="nextSettingSlide">PROSSIMO</button>
+                            <button v-else class="btn btn-warning text-light fs-5 p-2 px-3"
+                                @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
                     <div v-else-if="currentSettingSlide === 2" key="2">
-                        <div class="d-flex flex-column gap-3 text-light justify-content-center align-items-center">
-                            <h2 class="text-center">PAROLE DA INDOVINARE</h2>
-                            <div class="d-flex gap-3 align-items-center">
-                                <button class="btn btn-primary p-2 px-3 fs-4" @click="game.actions.decrementChallengeLength()"
-                                    :disabled="game.state.challengeLength <= game.state.minChallengeLength">-</button>
-                                <div class="h-100 fs-4 d-flex align-items-center">{{ game.state.challengeLength }}</div>
-                                <button class="btn btn-primary p-2 px-3 fs-4" @click="game.actions.incrementChallengeLength()"
-                                    :disabled="game.state.challengeLength >= game.state.maxChallengeLength">+</button>
+                        <div class="d-flex flex-column gap-3 text-light justify-content-between h-100 align-items-center">
+                            <div class="d-flex flex-column gap-3 justify-content-center align-items-center h-100">
+                                <h2 class="text-center">PAROLE DA INDOVINARE</h2>
+                                <div class="d-flex gap-3 align-items-center">
+                                    <button class="btn border text-light p-2 px-3 fs-4"
+                                        @click="game.actions.decrementChallengeLength()"
+                                        :disabled="game.state.challengeLength <= game.state.minChallengeLength"><i
+                                            class="fa-solid fa-minus"></i></button>
+                                    <div class="h-100 fs-4 d-flex align-items-center px-3">{{ game.state.challengeLength }}
+                                    </div>
+                                    <button class="btn border text-light p-2 px-3 fs-4"
+                                        @click="game.actions.incrementChallengeLength()"
+                                        :disabled="game.state.challengeLength >= game.state.maxChallengeLength"><i
+                                            class="fa-solid fa-plus"></i></button>
+                                </div>
                             </div>
-                            <button class="btn btn-primary fs-5 p-2 px-3 position-absolute bottom-0 start-50 translate-middle" @click="goToGame()">CONFERMA</button>
+                            <button class="btn btn-warning text-light fs-5 p-2 px-3" @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
                 </transition>
@@ -75,7 +101,7 @@ export default {
                 this.currentSettingSlide++;
             }
         },
-        previewSettingSlide(){
+        previewSettingSlide() {
             this.nameDirectionSlide = 'slidedx';
             if (this.currentSettingSlide > 1) {
                 this.currentSettingSlide--;
@@ -83,7 +109,7 @@ export default {
         },
         goToGame() {
             if (this.openSettingsAlone) {
-                this.$router.push({ path: '/game', query: { letters: game.state.wordLength}});
+                this.$router.push({ path: '/game', query: { letters: game.state.wordLength } });
             } else {
                 this.$router.push({ path: '/game', query: { challenge: '123456', letters: game.state.wordLength, challengeLength: game.state.challengeLength } })
             }
@@ -165,6 +191,5 @@ export default {
 .slidedx-leave-active {
     transition: all .3s ease;
 }
-
 </style>
 
