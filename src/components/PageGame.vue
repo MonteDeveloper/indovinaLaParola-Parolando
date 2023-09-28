@@ -30,6 +30,7 @@ export default {
         if(this.isChallengeMode){
             this.game.state.challengeCode = this.$route.query.challenge;
             this.game.state.wordLength = this.$route.query.letters;
+            this.game.state.challengeLength = this.$route.query.challengeLength;
             this.game.actions.generateChallenge();
         }else{
             this.game.actions.generateOneGame();
