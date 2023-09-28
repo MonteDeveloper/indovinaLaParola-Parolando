@@ -1,0 +1,66 @@
+import { reactive } from 'vue';
+import axios from 'axios';
+
+function* pseudoRandomGenerator(seed) {
+  let value = seed;
+  while (true) {
+    value = Math.sin(value) * 10000;
+    yield value - Math.floor(value);
+  }
+}
+
+function hashCode(s) {
+  let h;
+  for(let i = 0; i < s.length; i++)
+    h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+
+  return (h / 2147483647) + 0.5; // Normalizza a un valore tra 0 e 1
+}
+
+const state = reactive({
+  words: [],
+  wordsToGuess: [],
+  wordLength: 5,
+  maxLetters: 8,
+  minLetters: 4,
+  challengeCode: null,
+  seed: null,
+});
+
+const actions = {
+  async loadWords() {
+    const response = await axios.get('/1000_parole_italiane_comuni.txt');
+    state.words = response.data.split('\n');
+  },
+  generateChallenge() {
+    actions.setSeed(state.challengeCode)
+    const filteredWords = state.words.filter(word => word.length == state.wordLength);
+    const prng = pseudoRandomGenerator(state.seed);
+    state.wordsToGuess = [];
+    for (let i = 0; i < 5; i++) {
+      const index = Math.floor(prng.next().value * filteredWords.length);
+      state.wordsToGuess.push(filteredWords[index]);
+      filteredWords.splice(index, 1); // Remove the selected word from the array to avoid duplicates
+    }
+  },
+  generateOneGame() {
+    const filteredWords = state.words.filter(word => word.length == state.wordLength);
+    const index = Math.floor(Math.random() * filteredWords.length);
+    state.wordsToGuess = [filteredWords[index]];
+  },
+  incrementWordLength() {
+    if (state.wordLength < state.maxLetters) {
+      state.wordLength++;
+    }
+  },
+  decrementWordLength() {
+    if (state.wordLength > state.minLetters) {
+      state.wordLength--;
+    }
+  },
+  setSeed(value) {
+    state.seed = hashCode(value);
+  },
+};
+
+export default { state, actions };
