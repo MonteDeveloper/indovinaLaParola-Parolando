@@ -1,0 +1,10 @@
+//? Fontawesome
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+//? Miei file di stile vari
+@import '/src/scss/bootstrap_custom.scss';
+@import '/src/scss/general.scss';
+
+//? SCSS Bootstrap per personalizzazione
+//! importare sempre DOPO il mio file bootstrap_custom.scss
+@import '/node_modules/bootstrap/scss/bootstrap.scss';
