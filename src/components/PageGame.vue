@@ -7,23 +7,22 @@
             <div class="text-center">
                 <div v-if="isChallengeMode">
                     <h1 class="display-1 py-3">CHALLENGE</h1>
-                    <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }} parole da indovinare!</p>
+                    <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }} parole da
+                        indovinare!</p>
                 </div>
                 <div v-else>
                     <h1 class="display-1 py-3">SOLO</h1>
                 </div>
-    
-                <p class="m-0">test: "{{this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase()}}"</p>
+
+                <p class="m-0">test: "{{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}"</p>
+                {{ this.guessedLetters }} {{ this.guessedLettersInPosition }}
             </div>
-            <!-- QUADRATI PAROLE -->
-            <div @click="alert('funziona')" class="w-100" :class="{ 'opacity-50 ': currentTry < index }"
-                v-for="(singleTry, index) in totalTry">
+            <!-- QUADRATletterIndex PAROLE -->
+            <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }" v-for="(singleTry, tryWordIndex) in totalTry">
                 <div class="d-grid gap-1" :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
-                    <div v-for="i in game.state.wordLength"
-                        class="d-flex align-items-center justify-content-center bg-primary rounded-1 square-box fw-bold"
-                        ref="squareBox">
+                    <div v-for="letterIndex in game.state.wordLength" :class="calculateSquareClass(letterIndex, tryWordIndex)" ref="squareBox">
                         <span class="d-flex align-items-center h-100 m-0" :class="'h' + (game.state.wordLength - 3)">{{
-                            tryWords[index] && tryWords[index][i - 1] ? tryWords[index][i - 1].toUpperCase() : '' }}</span>
+                            tryWords[tryWordIndex] && tryWords[tryWordIndex][letterIndex - 1] ? tryWords[tryWordIndex][letterIndex - 1].toUpperCase() : '' }}</span>
                     </div>
                 </div>
             </div>
@@ -69,6 +68,8 @@ export default {
                 '',
                 ''
             ],
+            guessedLetters: ['', '', '', '', ''],
+            guessedLettersInPosition: ['', '', '', '', ''],
         };
     },
     async mounted() {
@@ -126,25 +127,37 @@ export default {
             }
         },
         checkGuessWord(inputWord) {
-            const currentWord = this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase();
-            const isCorrectGuess = currentWord == inputWord.toUpperCase();
+            const currentWord = this.removeAccents(this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase());
+            const guessedWord = inputWord.toUpperCase();
 
-            if (isCorrectGuess) {
-                return true;
+            this.guessedLetters[this.currentTry] = '';
+            this.guessedLettersInPosition[this.currentTry] = '';
+
+            for (let i = 0; i < guessedWord.length; i++) {
+                if (currentWord[i] === guessedWord[i]) {
+                    this.guessedLettersInPosition[this.currentTry] += guessedWord[i];
+                } else if (currentWord.includes(guessedWord[i])) {
+                    this.guessedLetters[this.currentTry] += guessedWord[i];
+                }
             }
-            return false;
+
+            return currentWord === guessedWord;
         },
 
-        visualizeScore(isWordGuessed){
-            if(isWordGuessed){
+        removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        },
+
+        visualizeScore(isWordGuessed) {
+            if (isWordGuessed) {
                 console.log("Parola indovinata! Score: +1");
-            }else{
-                console.log("Parola NON indovinata ["+ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() +"]. Score: nessun punto aggiuntivo");
+            } else {
+                console.log("Parola NON indovinata [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]. Score: nessun punto aggiuntivo");
             }
 
-            //inserire pulsanti che iniziano nuovo gioco o vanno alla prossima parola challenge
+            //inserire pulsantletterIndex che iniziano nuovo gioco o vanno alla prossima parola challenge
             if (this.isChallengeMode) {
-                if(this.currentIndexWordToGuess + 1 < this.game.state.challengeLength){
+                if (this.currentIndexWordToGuess + 1 < this.game.state.challengeLength) {
                     this.prepareForNextChallenge();
                 }
             } else {
@@ -154,16 +167,36 @@ export default {
 
         prepareForNextChallenge() {
             this.currentIndexWordToGuess += 1;
-            this.tryWords = ['', '', '', '', ''];
+            this.guessedLetters = ['', '', '', '', ''],
+                this.guessedLettersInPosition = ['', '', '', '', ''],
+                this.tryWords = ['', '', '', '', ''];
             this.currentTry = 0;
             this.canWrite = true;
         },
-        prepareForNextSolo(){
+        prepareForNextSolo() {
             this.game.actions.generateOneGame();
-            this.tryWords = ['', '', '', '', ''];
+            this.guessedLetters = ['', '', '', '', ''],
+                this.guessedLettersInPosition = ['', '', '', '', ''],
+                this.tryWords = ['', '', '', '', ''];
             this.currentTry = 0;
             this.canWrite = true;
+        },
+        calculateSquareClass(letterIndex, tryWordIndex) {
+            const letter = this.tryWords[tryWordIndex][letterIndex - 1];
+            if (letter) {
+                const upperCaseLetter = letter.toUpperCase();
+                const currentWordToGuess = this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase();
+                if (this.guessedLettersInPosition[tryWordIndex].includes(upperCaseLetter) && currentWordToGuess[letterIndex - 1] === upperCaseLetter) {
+                    return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
+                } else if (this.guessedLetters[tryWordIndex].includes(upperCaseLetter)) {
+                    return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
+                } else {
+                    return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                }
+            }
+            return 'd-flex align-items-center justify-content-center bg-primary rounded-1 square-box fw-bold';
         }
+
 
     }
 };
