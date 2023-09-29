@@ -1,20 +1,20 @@
 <template>
     <div v-if="wordsLoaded"
         class="vh-100 d-flex flex-column justify-content-center align-items-center container-fluid gap-3">
-        <!-- CHALLENGE -->
-        <div v-if="isChallengeMode" class="bg-primary text-light p-5 rounded">
-            <div class="fs-3 m-0">
-                <h2>CODE: {{ game.state.challengeCode }}</h2>
-                <ul>
-                    <li v-for="(word, index) in game.state.wordsToGuess" :key="index">{{ word }}</li>
-                </ul>
-            </div>
-        </div>
 
         <!-- SOLO -->
-        <div v-else class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3 flex-fill">
-            <h1 class="display-1 py-3">SOLO</h1>
-            <p>{{this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase()}}</p>
+        <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3 flex-fill">
+            <div class="text-center">
+                <div v-if="isChallengeMode">
+                    <h1 class="display-1 py-3">CHALLENGE</h1>
+                    <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }} parole da indovinare!</p>
+                </div>
+                <div v-else>
+                    <h1 class="display-1 py-3">SOLO</h1>
+                </div>
+    
+                <p class="m-0">test: "{{this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase()}}"</p>
+            </div>
             <!-- QUADRATI PAROLE -->
             <div @click="alert('funziona')" class="w-100" :class="{ 'opacity-50 ': currentTry < index }"
                 v-for="(singleTry, index) in totalTry">
@@ -144,7 +144,7 @@ export default {
 
             //inserire pulsanti che iniziano nuovo gioco o vanno alla prossima parola challenge
             if (this.isChallengeMode) {
-                if(this.currentIndexWordToGuess < this.game.state.challengeLength){
+                if(this.currentIndexWordToGuess + 1 < this.game.state.challengeLength){
                     this.prepareForNextChallenge();
                 }
             } else {
