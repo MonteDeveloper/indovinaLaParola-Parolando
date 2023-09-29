@@ -14,8 +14,9 @@
         <!-- SOLO -->
         <div v-else class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3 flex-fill">
             <h1 class="display-1 py-3">SOLO</h1>
+            <p>{{this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase()}}</p>
             <!-- QUADRATI PAROLE -->
-            <div @click="alert('funziona')" class="w-100" :class="{ 'opacity-50 ': currentTry < index + 1 }"
+            <div @click="alert('funziona')" class="w-100" :class="{ 'opacity-50 ': currentTry < index }"
                 v-for="(singleTry, index) in totalTry">
                 <div class="d-grid gap-1" :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
                     <div v-for="i in game.state.wordLength"
@@ -50,20 +51,21 @@ export default {
     data() {
         return {
             game,
+            canWrite: true,
             isChallengeMode: null,
             wordsLoaded: false,
-            currentIndexWord: 0,
+            currentIndexWordToGuess: 0,
             totalTry: 5,
-            currentTry: 1,
+            currentTry: 0,
             keyboardLayout: [
                 ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
                 ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
                 ['CANC', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'INVIO']
             ],
             tryWords: [
-                'ciao',
-                'benone',
-                'bene',
+                '',
+                '',
+                '',
                 '',
                 ''
             ],
@@ -98,9 +100,71 @@ export default {
             });
         },
         handleKeyPress(key) {
-            console.log(key);
-            // Qui puoi chiamare la tua funzione passando il carattere della lettera
+            const currentWord = this.tryWords[this.currentTry];
+
+            if (key.toUpperCase() === 'INVIO' && currentWord.length < this.game.state.wordLength) {
+                return;
+            }
+            if (key.toUpperCase() === 'INVIO') {
+                let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
+                if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
+                    this.visualizeScore(isWordGuessed);
+                }
+                else {
+                    this.currentTry += 1;
+                    this.canWrite = true;
+                }
+            } else if (this.canWrite) {
+                this.addCharacter(key);
+            }
+        },
+        addCharacter(char) {
+            if (this.tryWords[this.currentTry].length < this.game.state.wordLength) {
+                this.tryWords[this.currentTry] += char;
+            } else {
+                this.canWrite = false;
+            }
+        },
+        checkGuessWord(inputWord) {
+            const currentWord = this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase();
+            const isCorrectGuess = currentWord == inputWord.toUpperCase();
+
+            if (isCorrectGuess) {
+                return true;
+            }
+            return false;
+        },
+
+        visualizeScore(isWordGuessed){
+            if(isWordGuessed){
+                console.log("Parola indovinata! Score: +1");
+            }else{
+                console.log("Parola NON indovinata ["+ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() +"]. Score: nessun punto aggiuntivo");
+            }
+
+            //inserire pulsanti che iniziano nuovo gioco o vanno alla prossima parola challenge
+            if (this.isChallengeMode) {
+                if(this.currentIndexWordToGuess < this.game.state.challengeLength){
+                    this.prepareForNextChallenge();
+                }
+            } else {
+                this.prepareForNextSolo();
+            }
+        },
+
+        prepareForNextChallenge() {
+            this.currentIndexWordToGuess += 1;
+            this.tryWords = ['', '', '', '', ''];
+            this.currentTry = 0;
+            this.canWrite = true;
+        },
+        prepareForNextSolo(){
+            this.game.actions.generateOneGame();
+            this.tryWords = ['', '', '', '', ''];
+            this.currentTry = 0;
+            this.canWrite = true;
         }
+
     }
 };
 </script>

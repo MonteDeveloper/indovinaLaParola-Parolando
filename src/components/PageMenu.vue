@@ -22,7 +22,7 @@
                 class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-50 position-absolute top-50 start-50 translate-middle w-100">
                 <div class="w-100 d-flex justify-content-between">
                     <div class="col-6">
-                        <Transition name="slidesx" mode="in">
+                        <Transition name="slidesx" mode="out-in">
                             <button v-if="currentSettingSlide > 1" class="btn border text-light fs-4 px-4 m-2"
                                 @click="previewSettingSlide"><i class="fa-solid fa-angle-left"></i></button>
                         </Transition>
