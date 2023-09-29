@@ -6,7 +6,7 @@
         <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3 flex-fill">
             <div class="text-center">
                 <div v-if="isChallengeMode">
-                    <h1 class="display-1 py-3">CHALLENGE</h1>
+                    <h1 class="display-1">CHALLENGE</h1>
                     <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }} parole da
                         indovinare!</p>
                 </div>
@@ -15,18 +15,20 @@
                 </div>
 
                 <p class="m-0">test: "{{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}"</p>
-                {{ this.guessedLetters }} {{ this.guessedLettersInPosition }}
             </div>
             <!-- QUADRATletterIndex PAROLE -->
-            <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
-                v-for="(singleTry, tryWordIndex) in totalTry">
-                <div class="d-grid gap-1" :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
-                    <div v-for="letterIndex in game.state.wordLength"
-                        :class="calculateSquareClass(letterIndex, tryWordIndex)" ref="squareBox"
-                        :style="{ transitionDelay: letterIndex / 3 + 's' }">
-                        <span class="d-flex align-items-center h-100 m-0" :class="'h' + (game.state.wordLength - 3)">{{
-                            tryWords[tryWordIndex] && tryWords[tryWordIndex][letterIndex - 1] ?
-                            tryWords[tryWordIndex][letterIndex - 1].toUpperCase() : '' }}</span>
+            <div class="w-100 h-100 d-flex flex-column gap-1">
+                <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
+                    v-for="(singleTry, tryWordIndex) in totalTry">
+                    <div class="d-grid gap-1" :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
+                        <div v-for="letterIndex in game.state.wordLength"
+                            :class="calculateSquareClass(letterIndex, tryWordIndex) + ' square-box'" ref="squareBox"
+                            :style="{ transitionDelay: letterIndex / 3 + 's' }">
+                            <span class="d-flex align-items-center h-100 m-0" :class="'h' + (game.state.wordLength - 3)">{{
+                                tryWords[tryWordIndex] && tryWords[tryWordIndex][letterIndex - 1] ?
+                                tryWords[tryWordIndex][letterIndex - 1].toUpperCase() : '' }}</span>
+                        </div>
+    
                     </div>
                 </div>
             </div>
@@ -37,7 +39,7 @@
             <div class="flex-fill d-flex flex-column justify-content-around">
                 <div class="d-flex justify-content-center gap-1 mb-1 flex-fill" v-for="(row, rowIndex) in keyboardLayout"
                     :key="'row' + rowIndex">
-                    <button class="btn btn-secondary rounded-1 d-flex align-items-center justify-content-center flex-fill"
+                    <button class="btn btn-secondary rounded-1 p-0 d-flex align-items-center justify-content-center flex-fill"
                         v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)">
                         {{ key.toUpperCase() }}
                     </button>
@@ -218,11 +220,13 @@ export default {
 
 <style lang="scss" scoped>
 #keyboard {
-    height: 250px !important;
+    height: 200px !important;
 }
 
 .square-box {
     transition: background-color .3s ease, opacity .5s ease;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 }
 
 .blockTransition {
