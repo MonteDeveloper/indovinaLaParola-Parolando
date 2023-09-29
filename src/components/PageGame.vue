@@ -168,7 +168,7 @@ export default {
             if (isWordGuessed) {
                 alert("Parola indovinata! ["+ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() +"]");
             } else {
-                console.log("Parola NON indovinata... [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
+                alert("Parola NON indovinata... [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
             }
 
             //inserire pulsantletterIndex che iniziano nuovo gioco o vanno alla prossima parola challenge
