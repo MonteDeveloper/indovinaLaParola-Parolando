@@ -120,15 +120,24 @@ export default {
                     this.currentTry += 1;
                     this.canWrite = true;
                 }
+            } else if (key.toUpperCase() === 'CANC') {
+                this.cancCharacter();
             } else if (this.canWrite) {
                 this.addCharacter(key);
             }
         },
+
         addCharacter(char) {
             if (this.tryWords[this.currentTry].length < this.game.state.wordLength) {
                 this.tryWords[this.currentTry] += char;
             } else {
                 this.canWrite = false;
+            }
+        },
+        cancCharacter() {
+            if (this.tryWords[this.currentTry].length > 0) {
+                this.tryWords[this.currentTry] = this.tryWords[this.currentTry].slice(0, -1);
+                this.canWrite = true;
             }
         },
         checkGuessWord(inputWord) {
@@ -195,7 +204,7 @@ export default {
                     return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
                 } else if (this.guessedLetters[tryWordIndex].includes(upperCaseLetter)) {
                     return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
-                } else if(currentWordToGuess.length == this.game.state.wordLength) {
+                } else if (currentWordToGuess.length == this.game.state.wordLength) {
                     return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransition';
                 }
             }
@@ -216,7 +225,7 @@ export default {
     transition: background-color .3s ease, opacity .5s ease;
 }
 
-.blockTransition{
+.blockTransition {
     transition-delay: 0s !important;
 }
 </style>
