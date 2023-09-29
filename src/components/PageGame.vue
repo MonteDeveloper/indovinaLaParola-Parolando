@@ -11,10 +11,10 @@
                         indovinare!</p>
                 </div>
                 <div v-else>
-                    <h1 class="display-1 py-3">SOLO</h1>
+                    <h1 class="display-1">SOLO</h1>
                 </div>
 
-                <p class="m-0">test: "{{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}"</p>
+                <!-- <p class="m-0">test: "{{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}"</p> -->
             </div>
             <!-- QUADRATletterIndex PAROLE -->
             <div class="w-100 h-100 d-flex flex-column gap-1">
@@ -166,9 +166,9 @@ export default {
 
         visualizeScore(isWordGuessed) {
             if (isWordGuessed) {
-                console.log("Parola indovinata! Score: +1");
+                alert("Parola indovinata! ["+ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() +"]");
             } else {
-                console.log("Parola NON indovinata [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]. Score: nessun punto aggiuntivo");
+                console.log("Parola NON indovinata... [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
             }
 
             //inserire pulsantletterIndex che iniziano nuovo gioco o vanno alla prossima parola challenge
