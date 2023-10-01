@@ -244,7 +244,7 @@ export default {
                     }
                     return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay';
                 } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
-                    return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
+                    return 'd-flex align-items-center justify-content-center bg-info rounded-1 square-box fw-bold';
                 } else{
                     if(thisTryIsCompleted){
                         return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
@@ -260,7 +260,7 @@ export default {
                 if (this.lettersNoInTheWord.includes(upperCaseLetter)) {
                     return 'border border-2 border-primary';
                 } else if (this.guessedLetters.some(guessedLetter => guessedLetter.includes(upperCaseLetter)) && !this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
-                    return 'bg-warning';
+                    return 'bg-info';
                 } else if (this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
                     return 'bg-success';
                 }
