@@ -9,6 +9,10 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener('dblclick', function (e) {
+      e.preventDefault();
+    });
+
   },
   methods: {
   }
@@ -21,5 +25,4 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
