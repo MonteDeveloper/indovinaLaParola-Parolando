@@ -15,7 +15,6 @@
                         </div>
                         <p class="m-0 text-center">debug: {{
                             this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}</p>
-                            {{ this.canWrite }}
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
                         v-for="(singleTry, tryWordIndex) in totalTry">
@@ -233,23 +232,23 @@ export default {
                 }
 
                 if (thisTryIsCompleted && this.lettersNoInTheWord.includes(currentLetterUpperCase)) {
-                    return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                    return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary scaleDown';
                 }
 
                 if (this.guessedLettersInPosition[tryWordIndex].includes(currentLetterUpperCase) && wordToGuess[letterIndex - 1] === currentLetterUpperCase) {
-                    return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
+                    return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold scaleDown';
                 } else if (letterCountInCorrectPositions >= letterCountInWordToGuess) {
                     if(thisTryIsCompleted){
-                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary scaleDown';
                     }
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay';
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay popscaleAnim';
                 } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
-                    return 'd-flex align-items-center justify-content-center bg-info rounded-1 square-box fw-bold';
+                    return 'd-flex align-items-center justify-content-center bg-info rounded-1 square-box fw-bold scaleDown';
                 } else{
                     if(thisTryIsCompleted){
-                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary scaleDown';
                     }
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay';
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay popscaleAnim';
                 }
             }
             return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransitionDelay';
@@ -286,10 +285,31 @@ export default {
 }
 
 .square-box {
-    transition: background-color .3s ease, opacity .5s ease;
+    transition: background-color .3s ease, scale .3s ease;
     width: 100%;
     aspect-ratio: 1 / 1;
 }
+
+.square-box.popscaleAnim {
+    animation: popscale .3s ease;
+}
+
+.scaleDown{
+    scale: .9;
+}
+
+@keyframes popscale {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 .bgTransition {
     transition: background-color .3s ease
