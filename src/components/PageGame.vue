@@ -37,14 +37,15 @@
                 <div class="flex-fill d-flex flex-column justify-content-around">
                     <div class="d-flex justify-content-center gap-1 mb-1 flex-fill"
                         v-for="(row, rowIndex) in keyboardLayout" :key="'row' + rowIndex">
-                        <button
-                            class="btn btn-secondary rounded-1 p-0 d-flex align-items-center justify-content-center flex-fill"
-                            v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)">
-                            <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
+                        <button class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1"
+                            v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
+                            :class="calculateKeyButtonClass(key)">
+                            <span :class="{'btn-keyboard': key.length == 1}">{{ key.toUpperCase() }}</span>
                         </button>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -67,6 +68,7 @@ export default {
                 ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
                 ['INVIO', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'CANC']
             ],
+            lettersNoInTheWord: '',
             tryWords: [],
             guessedLetters: [],
             guessedLettersInPosition: [],
@@ -154,6 +156,8 @@ export default {
                     this.guessedLettersInPosition[this.currentTry] += guessedWord[i];
                 } else if (currentWord.includes(guessedWord[i])) {
                     this.guessedLetters[this.currentTry] += guessedWord[i];
+                }else{
+                    this.lettersNoInTheWord += guessedWord[i];
                 }
             }
 
@@ -183,18 +187,30 @@ export default {
 
         prepareForNextChallenge() {
             this.currentIndexWordToGuess += 1;
-            this.guessedLetters = ['', '', '', '', ''],
-                this.guessedLettersInPosition = ['', '', '', '', ''],
-                this.tryWords = ['', '', '', '', ''];
+            this.guessedLetters = [];
+            this.guessedLettersInPosition = [];
+            this.tryWords = [];
+            for (let i = 0; i < this.totalTry; i++) {
+                this.tryWords.push('');
+                this.guessedLetters.push('');
+                this.guessedLettersInPosition.push('');
+            }
+            this.lettersNoInTheWord = '';
             this.currentTry = 0;
             this.canWrite = true;
         },
         prepareForNextSolo() {
             this.game.actions.generateOneGame();
-            this.guessedLetters = ['', '', '', '', ''],
-                this.guessedLettersInPosition = ['', '', '', '', ''],
-                this.tryWords = ['', '', '', '', ''];
+            this.guessedLetters = [];
+            this.guessedLettersInPosition = [];
+            this.tryWords = [];
+            for (let i = 0; i < this.totalTry; i++) {
+                this.tryWords.push('');
+                this.guessedLetters.push('');
+                this.guessedLettersInPosition.push('');
+            }
             this.currentTry = 0;
+            this.lettersNoInTheWord = '';
             this.canWrite = true;
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
@@ -217,7 +233,20 @@ export default {
                 }
             }
             return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransition';
-        }
+        },
+        calculateKeyButtonClass(letter) {
+            const upperCaseLetter = letter.toUpperCase();
+            if(upperCaseLetter != "INVIO" && upperCaseLetter != "CANC"){
+                if (this.lettersNoInTheWord.includes(upperCaseLetter)) {
+                    return 'bg-primary';
+                } else if (this.guessedLetters.some(guessedLetter => guessedLetter.includes(upperCaseLetter)) && !this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
+                    return 'bg-warning';
+                } else if (this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
+                    return 'bg-success';
+                }
+            }
+            return 'border border-2 border-primary';
+        },
     }
 };
 </script>
