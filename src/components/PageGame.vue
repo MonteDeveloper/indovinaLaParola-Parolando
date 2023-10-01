@@ -15,6 +15,7 @@
                         </div>
                         <p class="m-0 text-center">debug: {{
                             this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}</p>
+                            {{ this.canWrite }}
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
                         v-for="(singleTry, tryWordIndex) in totalTry">
@@ -37,10 +38,11 @@
                 <div class="flex-fill d-flex flex-column justify-content-around">
                     <div class="d-flex justify-content-center gap-1 mb-1 flex-fill"
                         v-for="(row, rowIndex) in keyboardLayout" :key="'row' + rowIndex">
-                        <button class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
+                        <button
+                            class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
                             v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
                             :class="calculateKeyButtonClass(key)">
-                            <span :class="{'btn-keyboard': key.length == 1}">{{ key.toUpperCase() }}</span>
+                            <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
                         </button>
                     </div>
                 </div>
@@ -132,10 +134,11 @@ export default {
         },
 
         addCharacter(char) {
-            if (this.tryWords[this.currentTry].length < this.game.state.wordLength) {
+            if(this.canWrite){
                 this.tryWords[this.currentTry] += char;
-            } else {
-                this.canWrite = false;
+                if (this.tryWords[this.currentTry].length >= this.game.state.wordLength){
+                    this.canWrite = false;
+                }
             }
         },
         cancCharacter() {
@@ -156,7 +159,7 @@ export default {
                     this.guessedLettersInPosition[this.currentTry] += guessedWord[i];
                 } else if (currentWord.includes(guessedWord[i])) {
                     this.guessedLetters[this.currentTry] += guessedWord[i];
-                }else{
+                } else {
                     this.lettersNoInTheWord += guessedWord[i];
                 }
             }
@@ -222,30 +225,47 @@ export default {
                 const letterCountInPreviousSubstring = (this.tryWords[tryWordIndex].substring(0, letterIndex - 1).toUpperCase().match(new RegExp(currentLetterUpperCase, 'g')) || []).length;
                 const letterCountInCorrectPositions = (this.guessedLettersInPosition[tryWordIndex].match(new RegExp(currentLetterUpperCase, 'g')) || []).length;
 
+                let thisTryIsCompleted = false;
+
+                if ((this.canWrite && this.tryWords[tryWordIndex].length >= this.game.state.wordLength) ||
+                    !this.canWrite && this.tryWords[tryWordIndex + 1] && this.tryWords[tryWordIndex + 1].length >= this.game.state.wordLength) {
+                        thisTryIsCompleted = true;
+                }
+
+                if (thisTryIsCompleted && this.lettersNoInTheWord.includes(currentLetterUpperCase)) {
+                    return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                }
+
                 if (this.guessedLettersInPosition[tryWordIndex].includes(currentLetterUpperCase) && wordToGuess[letterIndex - 1] === currentLetterUpperCase) {
                     return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
                 } else if (letterCountInCorrectPositions >= letterCountInWordToGuess) {
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransitionDelay';
+                    if(thisTryIsCompleted){
+                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                    }
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay';
                 } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
                     return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
-                } else {
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransitionDelay';
+                } else{
+                    if(thisTryIsCompleted){
+                        return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary';
+                    }
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay';
                 }
             }
             return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransitionDelay';
         },
         calculateKeyButtonClass(letter) {
             const upperCaseLetter = letter.toUpperCase();
-            if(upperCaseLetter != "INVIO" && upperCaseLetter != "CANC"){
+            if (upperCaseLetter != "INVIO" && upperCaseLetter != "CANC") {
                 if (this.lettersNoInTheWord.includes(upperCaseLetter)) {
-                    return 'bg-primary';
+                    return 'border border-2 border-primary';
                 } else if (this.guessedLetters.some(guessedLetter => guessedLetter.includes(upperCaseLetter)) && !this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
                     return 'bg-warning';
                 } else if (this.guessedLettersInPosition.some(guessedLetter => guessedLetter.includes(upperCaseLetter))) {
                     return 'bg-success';
                 }
             }
-            return 'border border-2 border-primary';
+            return 'bg-primary';
         },
     }
 };
@@ -271,7 +291,7 @@ export default {
     aspect-ratio: 1 / 1;
 }
 
-.bgTransition{
+.bgTransition {
     transition: background-color .3s ease
 }
 
