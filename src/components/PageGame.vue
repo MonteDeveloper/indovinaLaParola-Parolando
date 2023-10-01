@@ -1,52 +1,49 @@
 <template>
-    <div v-if="wordsLoaded"
-        class="vh-100 d-flex flex-column justify-content-center align-items-center container-fluid gap-3">
-
-        <!-- SOLO -->
-        <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3 flex-fill">
-            <div class="text-center">
-                <div v-if="isChallengeMode">
-                    <h1 class="display-1">CHALLENGE</h1>
-                    <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }} parole da
-                        indovinare!</p>
-                </div>
-                <div v-else>
-                    <h1 class="display-1">SOLO</h1>
-                </div>
-
-                <!-- <p class="m-0">test: "{{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}"</p> -->
-            </div>
-            <!-- QUADRATletterIndex PAROLE -->
-            <div class="w-100 h-100 d-flex flex-column gap-1">
-                <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
-                    v-for="(singleTry, tryWordIndex) in totalTry">
-                    <div class="d-grid gap-1" :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
-                        <div v-for="letterIndex in game.state.wordLength"
-                            :class="calculateSquareClass(letterIndex, tryWordIndex) + ' square-box'" ref="squareBox"
-                            :style="{ transitionDelay: letterIndex / 3 + 's' }">
-                            <span class="d-flex align-items-center h-100 m-0" :class="'h' + (game.state.wordLength - 3)">{{
-                                tryWords[tryWordIndex] && tryWords[tryWordIndex][letterIndex - 1] ?
-                                tryWords[tryWordIndex][letterIndex - 1].toUpperCase() : '' }}</span>
+    <div v-if="wordsLoaded" class="my-personalHeight d-flex align-items-center">
+        <div class="d-flex flex-column justify-content-center align-items-center container-fluid gap-3 h-100">
+            <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3">
+                <div class="w-100 d-flex flex-column gap-1 justify-content-center">
+                    <div class="text-center py-3">
+                        <div v-if="isChallengeMode">
+                            <h1 class="display-1">CHALLENGE</h1>
+                            <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }}
+                                parole da
+                                indovinare!</p>
                         </div>
-    
+                        <div v-else>
+                            <h1 class="display-1">SOLO</h1>
+                        </div>
+                    </div>
+                    <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
+                        v-for="(singleTry, tryWordIndex) in totalTry">
+                        <div class="d-grid gap-1"
+                            :style="{ gridTemplateColumns: 'repeat(' + game.state.wordLength + ', 1fr)' }">
+                            <div v-for="letterIndex in game.state.wordLength"
+                                :class="calculateSquareClass(letterIndex, tryWordIndex) + ' square-box'" ref="squareBox"
+                                :style="{ transitionDelay: letterIndex / 3 + 's' }">
+                                <span class="d-flex align-items-center h-100 m-0"
+                                    :class="'h' + (game.state.wordLength - 3)">{{
+                                        tryWords[tryWordIndex] && tryWords[tryWordIndex][letterIndex - 1] ?
+                                        tryWords[tryWordIndex][letterIndex - 1].toUpperCase() : '' }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <div id="keyboard" class="d-flex flex-column justify-content-center gap-2 h-100 w-100">
-            <div class="flex-fill d-flex flex-column justify-content-around">
-                <div class="d-flex justify-content-center gap-1 mb-1 flex-fill" v-for="(row, rowIndex) in keyboardLayout"
-                    :key="'row' + rowIndex">
-                    <button class="btn btn-secondary rounded-1 p-0 d-flex align-items-center justify-content-center flex-fill"
-                        v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)">
-                        {{ key.toUpperCase() }}
-                    </button>
+            <div id="keyboard" class="d-flex flex-column justify-content-center gap-2 h-100 w-100">
+                <div class="flex-fill d-flex flex-column justify-content-around">
+                    <div class="d-flex justify-content-center gap-1 mb-1 flex-fill"
+                        v-for="(row, rowIndex) in keyboardLayout" :key="'row' + rowIndex">
+                        <button
+                            class="btn btn-secondary rounded-1 p-0 d-flex align-items-center justify-content-center flex-fill"
+                            v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)">
+                            <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -61,22 +58,16 @@ export default {
             isChallengeMode: null,
             wordsLoaded: false,
             currentIndexWordToGuess: 0,
-            totalTry: 5,
+            totalTry: null,
             currentTry: 0,
             keyboardLayout: [
                 ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
                 ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-                ['CANC', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'INVIO']
+                ['INVIO', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'CANC']
             ],
-            tryWords: [
-                '',
-                '',
-                '',
-                '',
-                ''
-            ],
-            guessedLetters: ['', '', '', '', ''],
-            guessedLettersInPosition: ['', '', '', '', ''],
+            tryWords: [],
+            guessedLetters: [],
+            guessedLettersInPosition: [],
         };
     },
     async mounted() {
@@ -89,6 +80,13 @@ export default {
             this.game.actions.generateChallenge();
         } else {
             this.game.actions.generateOneGame();
+        }
+        this.totalTry = this.game.state.wordLength;
+
+        for (let i = 0; i < this.totalTry; i++) {
+            this.tryWords.push('');
+            this.guessedLetters.push('');
+            this.guessedLettersInPosition.push('');
         }
         this.wordsLoaded = true;
 
@@ -166,7 +164,7 @@ export default {
 
         visualizeScore(isWordGuessed) {
             if (isWordGuessed) {
-                alert("Parola indovinata! ["+ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() +"]");
+                alert("Parola indovinata! [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
             } else {
                 alert("Parola NON indovinata... [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
             }
@@ -219,8 +217,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.my-personalHeight {
+    height: 100vh;
+    height: 100dvh;
+}
+
+.btn-keyboard {
+    width: 20px;
+}
+
 #keyboard {
-    height: 200px !important;
+    max-height: 250px;
 }
 
 .square-box {
