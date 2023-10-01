@@ -5,13 +5,13 @@
                 <div class="w-100 d-flex flex-column gap-1 justify-content-center">
                     <div class="text-center py-3">
                         <div v-if="isChallengeMode">
-                            <h1 class="display-1">CHALLENGE</h1>
+                            <h1 class="display-1">MODALITA' SFIDA</h1>
                             <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }}
                                 parole da
                                 indovinare!</p>
                         </div>
                         <div v-else>
-                            <h1 class="display-1">SOLO</h1>
+                            <h1 class="display-1">SOLITARIA</h1>
                         </div>
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
@@ -59,6 +59,7 @@
                             <p>Non sei riuscito ad indovinare la parola, ma puoi sempre riprovare con un'altra</p>
                         </div>
                     </div>
+                    <p class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole, confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column col-12 rounded p-2">
                             <h2 class="">INFORMAZIONI PARTITA</h2>
@@ -89,9 +90,9 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-center align-items-center gap-3">
-                        <button class="btn btn-dark border border-primary rounded-4 fs-5 p-2 px-3"
+                        <button class="btn btn-dark rounded-4 fs-5 p-2 px-3"
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
-                        <button class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                        <button v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallenge() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
                     </div>
