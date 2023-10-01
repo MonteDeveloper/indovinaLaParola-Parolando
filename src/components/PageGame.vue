@@ -37,7 +37,7 @@
                 <div class="flex-fill d-flex flex-column justify-content-around">
                     <div class="d-flex justify-content-center gap-1 mb-1 flex-fill"
                         v-for="(row, rowIndex) in keyboardLayout" :key="'row' + rowIndex">
-                        <button class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1"
+                        <button class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
                             v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
                             :class="calculateKeyButtonClass(key)">
                             <span :class="{'btn-keyboard': key.length == 1}">{{ key.toUpperCase() }}</span>
@@ -225,14 +225,14 @@ export default {
                 if (this.guessedLettersInPosition[tryWordIndex].includes(currentLetterUpperCase) && wordToGuess[letterIndex - 1] === currentLetterUpperCase) {
                     return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
                 } else if (letterCountInCorrectPositions >= letterCountInWordToGuess) {
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransition';
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransitionDelay';
                 } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
                     return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
                 } else {
-                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransition';
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransitionDelay';
                 }
             }
-            return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransition';
+            return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransitionDelay';
         },
         calculateKeyButtonClass(letter) {
             const upperCaseLetter = letter.toUpperCase();
@@ -271,7 +271,11 @@ export default {
     aspect-ratio: 1 / 1;
 }
 
-.blockTransition {
+.bgTransition{
+    transition: background-color .3s ease
+}
+
+.blockTransitionDelay {
     transition-delay: 0s !important;
 }
 </style>
