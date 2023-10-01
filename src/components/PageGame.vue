@@ -41,7 +41,7 @@
                         <button
                             class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
                             v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
-                            :class="calculateKeyButtonClass(key)">
+                            :class="calculateKeyButtonClass(key)" :style="{ transitionDelay: game.state.wordLength * (1/3) + 's' }">
                             <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
                         </button>
                     </div>
