@@ -13,6 +13,8 @@
                         <div v-else>
                             <h1 class="display-1">SOLO</h1>
                         </div>
+                        <p class="m-0 text-center">debug: {{
+                            this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}</p>
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
                         v-for="(singleTry, tryWordIndex) in totalTry">
@@ -196,22 +198,26 @@ export default {
             this.canWrite = true;
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
-            const letter = this.tryWords[tryWordIndex][letterIndex - 1];
-            if (letter) {
-                const upperCaseLetter = letter.toUpperCase();
-                const currentWordToGuess = this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase();
-                if (this.guessedLettersInPosition[tryWordIndex].includes(upperCaseLetter) && currentWordToGuess[letterIndex - 1] === upperCaseLetter) {
+            const currentLetter = this.tryWords[tryWordIndex][letterIndex - 1];
+            if (currentLetter) {
+                const currentLetterUpperCase = currentLetter.toUpperCase();
+                const wordToGuess = this.removeAccents(this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase());
+                const letterCountInWordToGuess = (wordToGuess.match(new RegExp(currentLetterUpperCase, 'g')) || []).length;
+                const letterCountInPreviousSubstring = (this.tryWords[tryWordIndex].substring(0, letterIndex - 1).toUpperCase().match(new RegExp(currentLetterUpperCase, 'g')) || []).length;
+                const letterCountInCorrectPositions = (this.guessedLettersInPosition[tryWordIndex].match(new RegExp(currentLetterUpperCase, 'g')) || []).length;
+
+                if (this.guessedLettersInPosition[tryWordIndex].includes(currentLetterUpperCase) && wordToGuess[letterIndex - 1] === currentLetterUpperCase) {
                     return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold';
-                } else if (this.guessedLetters[tryWordIndex].includes(upperCaseLetter)) {
+                } else if (letterCountInCorrectPositions >= letterCountInWordToGuess) {
+                    return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransition';
+                } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
                     return 'd-flex align-items-center justify-content-center bg-warning rounded-1 square-box fw-bold';
-                } else if (currentWordToGuess.length == this.game.state.wordLength) {
+                } else {
                     return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary border border-3 border-primary blockTransition';
                 }
             }
             return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary blockTransition';
         }
-
-
     }
 };
 </script>
