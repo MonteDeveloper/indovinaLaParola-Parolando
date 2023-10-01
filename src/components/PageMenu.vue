@@ -71,7 +71,7 @@
                                             class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                            <button class="btn btn-warning text-light fs-5 p-2 px-3" @click="goToGame()">CONFERMA</button>
+                            <button class="btn btn-warning text-light fs-5 p-2 px-3 rounded-4" @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
                 </transition>
@@ -124,72 +124,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fade-slide-enter-from {
-    scale: 0;
-    transform: translate(-150%, -150%) !important;
-    opacity: 0;
-}
 
-.fade-slide-leave-to {
-    scale: 0;
-    transform: translate(-150%, -150%) !important;
-    opacity: 0;
-}
-
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-    scale: 1;
-    opacity: 1;
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-    transition: all .3s ease;
-}
-
-
-/* Animazione slide da destra a sinistra */
-.slidesx-enter-from {
-    transform: translateX(100%);
-    opacity: 0;
-}
-
-.slidesx-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
-}
-
-.slidesx-enter-to,
-.slidesx-leave-from {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.slidesx-enter-active,
-.slidesx-leave-active {
-    transition: all .3s ease;
-}
-
-/* Animazione slide da sinistra a destra */
-.slidedx-enter-from {
-    transform: translateX(-100%);
-    opacity: 0;
-}
-
-.slidedx-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
-}
-
-.slidedx-enter-to,
-.slidedx-leave-from {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.slidedx-enter-active,
-.slidedx-leave-active {
-    transition: all .3s ease;
-}
 </style>
 

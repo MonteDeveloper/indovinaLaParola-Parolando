@@ -1,5 +1,5 @@
 <template>
-    <div v-if="wordsLoaded" class="my-personalHeight d-flex align-items-center">
+    <div v-if="wordsLoaded" class="my-personalHeight d-flex align-items-center position-relative">
         <div class="d-flex flex-column justify-content-center align-items-center container-fluid gap-3 h-100">
             <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3">
                 <div class="w-100 d-flex flex-column gap-1 justify-content-center">
@@ -13,8 +13,6 @@
                         <div v-else>
                             <h1 class="display-1">SOLO</h1>
                         </div>
-                        <p class="m-0 text-center">debug: {{
-                            this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}</p>
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
                         v-for="(singleTry, tryWordIndex) in totalTry">
@@ -40,14 +38,66 @@
                         <button
                             class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
                             v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
-                            :class="calculateKeyButtonClass(key)" :style="{ transitionDelay: game.state.wordLength * (1/3) + 's' }">
+                            :class="calculateKeyButtonClass(key)"
+                            :style="currentTry > 1 ? { transitionDelay: game.state.wordLength * (1 / 3) + 's' } : ''">
                             <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
                         </button>
                     </div>
                 </div>
             </div>
-
         </div>
+        <transition class="p-4" name="fade-slide" mode="out-in">
+            <div v-if="endMatch" class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-light">
+                <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-100">
+                    <div class="w-100 d-flex justify-content-center align-items-center text-center">
+                        <div v-if="matchGuessed">
+                            <h2 class="text-success h1">OTTIMO!</h2>
+                            <p>Hai indovinato la parola al {{ this.currentTry + 1 }}º tentativo!</p>
+                        </div>
+                        <div v-else>
+                            <h2 class="text-danger h1">CHE SFORTUNA!</h2>
+                            <p>Non sei riuscito ad indovinare la parola, ma puoi sempre riprovare con un'altra</p>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex justify-content-center align-items-center h-100">
+                        <div class="d-flex flex-column col-12 rounded p-2">
+                            <h2 class="">INFORMAZIONI PARTITA</h2>
+                            <div class="d-flex col-12 gap-2">
+                                <div class="text-end col-6">
+                                    Parola:
+                                </div>
+                                <div class="col-6">
+                                    {{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}
+                                </div>
+                            </div>
+                            <div class="d-flex col-12 gap-2">
+                                <div class="text-end col-6">
+                                    Punti guadagnati:
+                                </div>
+                                <div class="col-6">
+                                    {{ this.game.state.wordLength - this.currentTry }}
+                                </div>
+                            </div>
+                            <div class="d-flex col-12 gap-2">
+                                <div class="text-end col-6">
+                                    Punti totali:
+                                </div>
+                                <div class="col-6">
+                                    {{ this.totalScore }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex justify-content-center align-items-center gap-3">
+                        <button class="btn btn-dark border border-primary rounded-4 fs-5 p-2 px-3"
+                            @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
+                        <button class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            @click="isChallengeMode ? prepareForNextChallenge() : prepareForNextSolo()">PROSSIMA
+                            PAROLA</button>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -73,6 +123,10 @@ export default {
             tryWords: [],
             guessedLetters: [],
             guessedLettersInPosition: [],
+            endMatch: false,
+            matchGuessed: null,
+            totalScore: 0,
+            tryPointsMoltiplicator: 1,
         };
     },
     async mounted() {
@@ -133,9 +187,9 @@ export default {
         },
 
         addCharacter(char) {
-            if(this.canWrite){
+            if (this.canWrite) {
                 this.tryWords[this.currentTry] += char;
-                if (this.tryWords[this.currentTry].length >= this.game.state.wordLength){
+                if (this.tryWords[this.currentTry].length >= this.game.state.wordLength) {
                     this.canWrite = false;
                 }
             }
@@ -171,23 +225,16 @@ export default {
         },
 
         visualizeScore(isWordGuessed) {
-            if (isWordGuessed) {
-                alert("Parola indovinata! [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
-            } else {
-                alert("Parola NON indovinata... [" + this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() + "]");
-            }
-
-            //inserire pulsantletterIndex che iniziano nuovo gioco o vanno alla prossima parola challenge
-            if (this.isChallengeMode) {
-                if (this.currentIndexWordToGuess + 1 < this.game.state.challengeLength) {
-                    this.prepareForNextChallenge();
-                }
-            } else {
-                this.prepareForNextSolo();
-            }
+            let delay = this.game.state.wordLength * (1 / 3) * 1000 + 1000; // Converti in millisecondi
+            setTimeout(() => {
+                this.matchGuessed = isWordGuessed;
+                this.endMatch = true;
+                this.totalScore += this.game.state.wordLength - this.currentTry;
+            }, delay);
         },
 
         prepareForNextChallenge() {
+            this.endMatch = false;
             this.currentIndexWordToGuess += 1;
             this.guessedLetters = [];
             this.guessedLettersInPosition = [];
@@ -202,6 +249,7 @@ export default {
             this.canWrite = true;
         },
         prepareForNextSolo() {
+            this.endMatch = false;
             this.game.actions.generateOneGame();
             this.guessedLetters = [];
             this.guessedLettersInPosition = [];
@@ -228,7 +276,7 @@ export default {
 
                 if ((this.canWrite && this.tryWords[tryWordIndex].length >= this.game.state.wordLength) ||
                     !this.canWrite && this.tryWords[tryWordIndex + 1] && this.tryWords[tryWordIndex + 1].length >= this.game.state.wordLength) {
-                        thisTryIsCompleted = true;
+                    thisTryIsCompleted = true;
                 }
 
                 if (thisTryIsCompleted && this.lettersNoInTheWord.includes(currentLetterUpperCase)) {
@@ -238,14 +286,14 @@ export default {
                 if (this.guessedLettersInPosition[tryWordIndex].includes(currentLetterUpperCase) && wordToGuess[letterIndex - 1] === currentLetterUpperCase) {
                     return 'd-flex align-items-center justify-content-center bg-success rounded-1 square-box fw-bold scaleDown';
                 } else if (letterCountInCorrectPositions >= letterCountInWordToGuess) {
-                    if(thisTryIsCompleted){
+                    if (thisTryIsCompleted) {
                         return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary scaleDown';
                     }
                     return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay popscaleAnim';
                 } else if (this.guessedLetters[tryWordIndex].includes(currentLetterUpperCase) && letterCountInPreviousSubstring < letterCountInWordToGuess) {
                     return 'd-flex align-items-center justify-content-center bg-info rounded-1 square-box fw-bold scaleDown';
-                } else{
-                    if(thisTryIsCompleted){
+                } else {
+                    if (thisTryIsCompleted) {
                         return 'd-flex align-items-center justify-content-center bg-dark rounded-1 square-box fw-bold border border-3 border-primary scaleDown';
                     }
                     return 'd-flex align-items-center justify-content-center rounded-1 square-box fw-bold bg-primary blockTransitionDelay popscaleAnim';
@@ -294,7 +342,7 @@ export default {
     animation: popscale .3s ease;
 }
 
-.scaleDown{
+.scaleDown {
     scale: .9;
 }
 
@@ -302,9 +350,11 @@ export default {
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(0.9);
     }
+
     100% {
         transform: scale(1);
     }
