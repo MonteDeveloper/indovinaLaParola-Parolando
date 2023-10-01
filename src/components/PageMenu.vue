@@ -111,7 +111,8 @@ export default {
             if (this.openSettingsAlone) {
                 this.$router.push({ path: '/game', query: { letters: game.state.wordLength } });
             } else {
-                this.$router.push({ path: '/game', query: { challenge: '123456', letters: game.state.wordLength, challengeLength: game.state.challengeLength } })
+                let randomChallenge = Math.floor(Math.random() * 900000) + 100000;
+                this.$router.push({ path: '/game', query: { challenge: randomChallenge, letters: game.state.wordLength, challengeLength: game.state.challengeLength } });
             }
         },
         closeSettings() {
