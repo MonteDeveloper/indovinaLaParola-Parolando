@@ -128,6 +128,7 @@ export default {
             matchGuessed: null,
             totalScore: 0,
             tryPointsMoltiplicator: 1,
+            sendedLastTry: false,
         };
     },
     async mounted() {
@@ -226,8 +227,10 @@ export default {
         },
 
         visualizeScore(isWordGuessed) {
+            this.sendedLastTry = true;
             let delay = this.game.state.wordLength * (1 / 3) * 1000 + 1000; // Converti in millisecondi
             setTimeout(() => {
+                this.sendedLastTry = false;
                 this.matchGuessed = isWordGuessed;
                 this.endMatch = true;
                 this.totalScore += this.game.state.wordLength - this.currentTry;
@@ -266,6 +269,7 @@ export default {
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
             const currentLetter = this.tryWords[tryWordIndex][letterIndex - 1];
+            console.log(currentLetter);
             if (currentLetter) {
                 const currentLetterUpperCase = currentLetter.toUpperCase();
                 const wordToGuess = this.removeAccents(this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase());
@@ -276,7 +280,8 @@ export default {
                 let thisTryIsCompleted = false;
 
                 if ((this.canWrite && this.tryWords[tryWordIndex].length >= this.game.state.wordLength) ||
-                    !this.canWrite && this.tryWords[tryWordIndex + 1] && this.tryWords[tryWordIndex + 1].length >= this.game.state.wordLength) {
+                    !this.canWrite && this.tryWords[tryWordIndex + 1] && this.tryWords[tryWordIndex + 1].length >= this.game.state.wordLength ||
+                    this.sendedLastTry){
                     thisTryIsCompleted = true;
                 }
 
