@@ -39,7 +39,7 @@
                             class="btn text-light p-0 d-flex align-items-center justify-content-center flex-fill rounded-1 bgTransition"
                             v-for="(key, keyIndex) in row" :key="'key' + keyIndex" @click="handleKeyPress(key)"
                             :class="calculateKeyButtonClass(key)"
-                            :style="currentTry > 1 ? { transitionDelay: game.state.wordLength * (1 / 3) + 's' } : ''">
+                            :style="currentTry == 0 && tryWords[0].length == 0 ? { transitionDelay: '0s' } : { transitionDelay: game.state.wordLength * (1 / 3) + 's' }">
                             <span :class="{ 'btn-keyboard': key.length == 1 }">{{ key.toUpperCase() }}</span>
                         </button>
                     </div>
@@ -59,7 +59,7 @@
                             <p>Non sei riuscito ad indovinare la parola, ma puoi sempre riprovare con un'altra</p>
                         </div>
                     </div>
-                    <p class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole, confronta i punteggi con i tuoi amici :)</p>
+                    <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole, confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column col-12 rounded p-2">
                             <h2 class="">INFORMAZIONI PARTITA</h2>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-center align-items-center gap-3">
-                        <button class="btn btn-dark rounded-4 fs-5 p-2 px-3"
+                        <button class="btn btn-secondary border border-light rounded-4 fs-5 p-2 px-3"
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
                         <button v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallenge() : prepareForNextSolo()">PROSSIMA
