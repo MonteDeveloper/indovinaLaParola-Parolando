@@ -76,7 +76,7 @@
                                     Punti guadagnati:
                                 </div>
                                 <div class="col-6 d-flex align-items-end flex-fill">
-                                    +{{ this.game.state.wordLength - this.currentTry }}
+                                    +{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}
                                 </div>
                             </div>
                             <div class="d-flex col-12 gap-2">
@@ -233,7 +233,9 @@ export default {
                 this.sendedLastTry = false;
                 this.matchGuessed = isWordGuessed;
                 this.endMatch = true;
-                this.totalScore += this.game.state.wordLength - this.currentTry;
+                if(this.matchGuessed){
+                    this.totalScore += this.game.state.wordLength - this.currentTry;
+                }
             }, delay);
         },
 
