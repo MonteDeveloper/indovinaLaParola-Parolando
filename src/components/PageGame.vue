@@ -47,8 +47,8 @@
             </div>
         </div>
         <transition class="p-4" name="fade-slide" mode="out-in">
-            <div v-if="endMatch" class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-light">
-                <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-100">
+            <div v-if="endMatch" class="position-absolute top-50 start-50 translate-middle w-100 text-light">
+                <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3">
                     <div class="w-100 d-flex justify-content-center align-items-center text-center">
                         <div v-if="matchGuessed">
                             <h2 class="text-success h1">OTTIMO!</h2>
@@ -62,12 +62,12 @@
                     <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole, confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column col-12 rounded p-2">
-                            <h2 class="">INFORMAZIONI PARTITA</h2>
+                            <h2 class="text-center">INFORMAZIONI PARTITA</h2>
                             <div class="d-flex col-12 gap-2">
                                 <div class="text-end col-6">
                                     Parola:
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 d-flex align-items-end flex-fill">
                                     {{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}
                                 </div>
                             </div>
@@ -75,15 +75,15 @@
                                 <div class="text-end col-6">
                                     Punti guadagnati:
                                 </div>
-                                <div class="col-6">
-                                    {{ this.game.state.wordLength - this.currentTry }}
+                                <div class="col-6 d-flex align-items-end flex-fill">
+                                    +{{ this.game.state.wordLength - this.currentTry }}
                                 </div>
                             </div>
                             <div class="d-flex col-12 gap-2">
                                 <div class="text-end col-6">
                                     Punti totali:
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 d-flex align-items-end flex-fill">
                                     {{ this.totalScore }}
                                 </div>
                             </div>
