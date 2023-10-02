@@ -33,7 +33,7 @@ const state = reactive({
 
 const actions = {
   async loadWords() {
-    const wordsCommon = await axios.get('/1800_parole_italiane.txt');
+    const wordsCommon = await axios.get('/1800_parole_italiane_comuni.txt');
     const otherWords = await axios.get('/60000_parole_italiane.txt');
     state.words = wordsCommon.data.split('\n');
     state.moreWords = otherWords.data.split('\n');
