@@ -240,7 +240,7 @@ export default {
                 return;
             }
             if (key.toUpperCase() === 'INVIO') {
-                if(this.game.state.words.includes(this.tryWords[this.currentTry])){
+                if(this.game.state.words.includes(this.tryWords[this.currentTry]) || this.game.state.moreWords.includes(this.tryWords[this.currentTry])){
                     let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
                     if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
                         this.visualizeScore(isWordGuessed);

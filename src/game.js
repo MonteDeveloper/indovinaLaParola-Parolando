@@ -19,6 +19,7 @@ function hashCode(s) {
 
 const state = reactive({
   words: [],
+  moreWords: [],
   wordsToGuess: [],
   wordLength: 5,
   challengeLength: 5,
@@ -32,8 +33,10 @@ const state = reactive({
 
 const actions = {
   async loadWords() {
-    const response = await axios.get('/60000_parole_italiane.txt');
-    state.words = response.data.split('\n');
+    const wordsCommon = await axios.get('/1800_parole_italiane.txt');
+    const otherWords = await axios.get('/60000_parole_italiane.txt');
+    state.words = wordsCommon.data.split('\n');
+    state.moreWords = otherWords.data.split('\n');
   },
   generateChallenge() {
     actions.setSeed(state.challengeCode)
