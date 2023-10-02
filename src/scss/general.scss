@@ -15,14 +15,12 @@ body {
 }
 
 .fade-slide-enter-from {
-    scale: 0;
-    transform: translate(-150%, -150%) !important;
+    scale: .7;
     opacity: 0;
 }
 
 .fade-slide-leave-to {
-    scale: 0;
-    transform: translate(-150%, -150%) !important;
+    scale: .7;
     opacity: 0;
 }
 
@@ -34,7 +32,7 @@ body {
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-    transition: all .3s ease;
+    transition: all .2s ease;
 }
 
 

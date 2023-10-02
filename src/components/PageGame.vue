@@ -10,13 +10,21 @@
                         <div>
                             Se indovini: +{{ this.game.state.wordLength - this.currentTry }}
                         </div>
-                        <div class="d-flex gap-3 fs-5">
+                        <div class="d-flex gap-2 fs-5">
                             <button
                                 @click="confirmSettingText = '1Vuoi tornare al menù principale? I dati e il punteggio di questa partita andranno persi'"
                                 class="text-light bg-dark border-0"><i class="fa-solid fa-house"></i></button>
                             <button
                                 @click="confirmSettingText = '2Vuoi cominciare una nuova partita da zero? I dati e il punteggio di questa partita andranno persi'"
                                 class="text-light bg-dark border-0"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button v-if="isChallengeMode" @click="shareChallenge()" class="text-light bg-dark border-0"><i
+                                    class="fa-solid fa-user-plus"></i></button>
+                            <transition name="fade-slide" mode="out-in">
+                                <div v-if="showCopyToClipboardMsg"
+                                    class="position-absolute text-center bg-light text-dark p-3 px-2 rounded w-100 start-0">
+                                    URL della sfida copiato negli appunti!
+                                </div>
+                            </transition>
                         </div>
                     </div>
                     <hr class="m-0">
@@ -65,7 +73,7 @@
             </div>
         </div>
         <transition class="p-4" name="fade-slide" mode="out-in">
-            <div v-if="endMatch" class="position-absolute top-50 start-50 translate-middle w-100 text-light">
+            <div v-if="endMatch" class="position-absolute w-100 text-light">
                 <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3">
                     <div class="w-100 d-flex justify-content-center align-items-center text-center">
                         <div v-if="matchGuessed">
@@ -124,8 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div v-else-if="confirmSettingText.length > 0"
-                class="position-absolute top-50 start-50 translate-middle w-100 text-light">
+            <div v-else-if="confirmSettingText.length > 0" class="position-absolute w-100 text-light">
                 <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3">
                     <div class="w-100 d-flex justify-content-center align-items-center text-center">
                         <div>
@@ -186,6 +193,7 @@ export default {
             sendedLastTry: false,
             confirmSettingText: '',
             wordCounter: 1,
+            showCopyToClipboardMsg: false,
         };
     },
     async mounted() {
@@ -389,6 +397,21 @@ export default {
             }
             return 'bg-primary';
         },
+        shareChallenge() {
+            if (navigator.share && false) {
+                navigator.share({
+                    title: 'Accetta la mia sfida!',
+                    text: 'Gioca la mia sfida su Parolando e vediamo se totalizzi più punti di me!',
+                    url: window.location.href,
+                })
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                this.showCopyToClipboardMsg = true;
+                setTimeout(() => {
+                    this.showCopyToClipboardMsg = false;
+                }, 3000);
+            }
+        }
     }
 };
 </script>
@@ -442,5 +465,6 @@ export default {
 
 .blockTransitionDelay {
     transition-delay: 0s !important;
-}</style>
+}
+</style>
 
