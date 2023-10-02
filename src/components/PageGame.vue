@@ -3,21 +3,21 @@
         <div class="d-flex flex-column justify-content-center align-items-center container-fluid gap-3 h-100">
             <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3">
                 <div class="w-100 d-flex flex-column gap-1 justify-content-center">
-                    <div class="d-flex justify-content-between w-100 py-3 align-items-center">
-                        <div>
+                    <div class="d-flex justify-content-between w-100 py-3 pb-2 align-items-center">
+                        <div class="fs-6">
                             Punti: {{ this.totalScore }}
                         </div>
                         <!-- <div>
                             Se indovini: +{{ this.game.state.wordLength - this.currentTry }}
                         </div> -->
-                        <div class="d-flex fs-5">
+                        <div class="d-flex fs-5 gap-2">
                             <button
                                 @click="confirmSettingText = '1Vuoi tornare al menù principale? I dati e il punteggio di questa partita andranno persi'"
-                                class="text-light bg-dark border-0"><i class="fa-solid fa-house"></i></button>
+                                class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-house"></i></button>
                             <button
                                 @click="confirmSettingText = '2Vuoi cominciare una nuova partita da zero? I dati e il punteggio di questa partita andranno persi'"
-                                class="text-light bg-dark border-0"><i class="fa-solid fa-rotate-left"></i></button>
-                            <button v-if="isChallengeMode" @click="shareChallenge()" class="text-light bg-dark border-0"><i
+                                class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button v-if="isChallengeMode" @click="shareChallenge()" class="text-light bg-dark border-0 p-0"><i
                                     class="fa-solid fa-user-plus"></i></button>
                             <transition name="fade-slide" mode="out-in">
                                 <div v-if="showCopyToClipboardMsg"
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <hr class="m-0">
-                    <div class="text-center pb-3">
+                    <div class="text-center pb-2">
                         <div v-if="isChallengeMode">
                             <h1 class="display-1">MODALITA' SFIDA</h1>
                             <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }}
