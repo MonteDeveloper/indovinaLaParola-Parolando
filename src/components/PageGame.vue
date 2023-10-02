@@ -161,10 +161,10 @@
                 </div>
             </div>
         </transition>
-        <transition name="fade" mode="out-in">
-            <div v-if="endMatch || confirmSettingText.length > 0" class="position-absolute vh-100 w-100 blackOverlay"></div>
-        </transition>
     </div>
+    <transition name="fade" mode="out-in">
+        <div v-if="endMatch || confirmSettingText.length > 0" class="position-absolute vh-100 w-100 start-0 top-0 blackOverlay"></div>
+    </transition>
 </template>
 
 <script>
