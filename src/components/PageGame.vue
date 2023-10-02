@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <transition class="p-4" name="fade-slide" mode="out-in">
+        <transition class="p-4 zIndexPrimary" name="fade-slide" mode="out-in">
             <div v-if="endMatch" class="position-absolute w-100 text-light">
                 <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3">
                     <div class="w-100 d-flex justify-content-center align-items-center text-center">
@@ -160,6 +160,9 @@
                     </div>
                 </div>
             </div>
+        </transition>
+        <transition name="fade" mode="out-in">
+            <div v-if="endMatch || confirmSettingText.length > 0" class="position-absolute vh-100 w-100 blackOverlay"></div>
         </transition>
     </div>
 </template>
@@ -465,6 +468,15 @@ export default {
 
 .blockTransitionDelay {
     transition-delay: 0s !important;
+}
+
+.blackOverlay{
+    z-index: 999;
+    background-color: rgba(0, 0, 0, .5)
+}
+
+.zIndexPrimary{
+    z-index: 9999;
 }
 </style>
 

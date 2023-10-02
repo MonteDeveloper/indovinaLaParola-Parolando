@@ -19,7 +19,7 @@
         <!-- IMPOSTAZIONI -->
         <transition class="position-relative" name="fade-slide" mode="out-in">
             <div v-if="openSettingsAlone || openSettingsChallenge"
-                class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-50 w-100">
+                class="bg-primary d-flex flex-column position-absolute rounded overflow-hidden p-3 h-50 w-100">
                 <div class="w-100 d-flex justify-content-between">
                     <div class="col-6">
                         <Transition name="slidesx" mode="out-in">
