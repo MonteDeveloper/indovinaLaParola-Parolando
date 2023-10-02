@@ -124,12 +124,12 @@
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
                         <button
                             v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallengeMatch() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
                         <button
                             v-else-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3" @click="newChallengeGame()">NUOVA
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3" @click="newChallengeGame()">NUOVA
                             SFIDA</button>
                     </div>
                 </div>
@@ -153,10 +153,10 @@
                             @click="confirmSettingText = ''">CONTINUA A GIOCARE</button>
 
                         <button v-if="confirmSettingText.substring(0, 1) == '1'"
-                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
                             @click="this.$router.push({ path: '/' })">TORNA AL MENU</button>
                         <button v-if="confirmSettingText.substring(0, 1) == '2'"
-                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? newChallengeGame() : newSoloGame()">NUOVA {{ isChallengeMode ? 'SFIDA'
                                 : 'PARTITA' }}</button>
                     </div>
