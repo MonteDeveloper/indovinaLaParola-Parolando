@@ -398,7 +398,7 @@ export default {
             return 'bg-primary';
         },
         shareChallenge() {
-            if (navigator.share && false) {
+            if (navigator.share) {
                 navigator.share({
                     title: 'Accetta la mia sfida!',
                     text: 'Gioca la mia sfida su Parolando e vediamo se totalizzi più punti di me!',
