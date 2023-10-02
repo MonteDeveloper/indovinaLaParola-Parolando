@@ -3,7 +3,7 @@
         <!-- LOGO -->
         <div class="d-flex justify-content-center align-items-center h-25 gap-2 fs-6">
             <div class="w-100 h-100 d-flex align-items-center">
-                <img class="img-fluid" src="/logo.png" alt="">
+                <img class="img-fluid bounce" src="/logo.png" alt="">
             </div>
         </div>
 
@@ -128,6 +128,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes bounce {
+  0%, 5%, 10% {
+    transform: translateY(0);
+  }
+  2% {
+    transform: translateY(-15px);
+  }
+  7%{
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.bounce {
+  animation: bounce 7s ease infinite;
+}
+
 
 </style>
 
