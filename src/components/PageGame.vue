@@ -107,18 +107,10 @@
                             </div>
                             <div class="d-flex col-12 gap-2">
                                 <div class="text-end col-6">
-                                    Punti guadagnati:
+                                    Punti:
                                 </div>
                                 <div class="col-6 d-flex align-items-end flex-fill">
-                                    +{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}
-                                </div>
-                            </div>
-                            <div class="d-flex col-12 gap-2">
-                                <div class="text-end col-6">
-                                    Punti totali:
-                                </div>
-                                <div class="col-6 d-flex align-items-end flex-fill">
-                                    {{ this.totalScore }}
+                                    {{ this.totalScore }} [+{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}]
                                 </div>
                             </div>
                         </div>
