@@ -10,7 +10,7 @@
                         <!-- <div>
                             Se indovini: +{{ this.game.state.wordLength - this.currentTry }}
                         </div> -->
-                        <div class="d-flex fs-6 gap-3">
+                        <div class="d-flex fs-5 gap-3">
                             <button
                                 @click="confirmSettingText = '1Vuoi tornare al menù principale? I dati e il punteggio di questa partita andranno persi'"
                                 class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-house"></i></button>
