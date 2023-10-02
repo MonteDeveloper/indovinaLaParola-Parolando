@@ -1,8 +1,10 @@
 <template>
     <div class="d-flex flex-column justify-content-center align-items-around vh-100 position-relative container">
         <!-- LOGO -->
-        <div class="d-flex justify-content-center align-items-center h-25">
-            <div class="text-light border p-5">LOGO</div>
+        <div class="d-flex justify-content-center align-items-center h-25 gap-2 fs-6">
+            <div class="w-100 h-100 d-flex align-items-center">
+                <img class="img-fluid" src="/logo.png" alt="">
+            </div>
         </div>
 
         <!-- PULSANTI -->
@@ -92,6 +94,7 @@ export default {
             openSettingsAlone: false,
             openSettingsChallenge: false,
             nameDirectionSlide: 'slidesx',
+            nameApp: "Parolando!",
         };
     },
     methods: {
