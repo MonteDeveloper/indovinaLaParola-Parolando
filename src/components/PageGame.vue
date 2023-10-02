@@ -88,7 +88,7 @@
                         </div>
                         <div v-else>
                             <h2 class="text-danger h1">CHE SFORTUNA!</h2>
-                            <p>Non sei riuscito ad indovinare la parola, ma puoi sempre riprovare con un'altra</p>
+                            <p>Non sei riuscito ad indovinare la parola...</p>
                         </div>
                     </div>
                     <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
