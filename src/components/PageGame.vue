@@ -25,6 +25,12 @@
                                     URL della sfida copiato negli appunti!
                                 </div>
                             </transition>
+                            <transition name="fade-slide" mode="out-in">
+                                <div v-if="showNoListWordMsg"
+                                    class="position-absolute text-center bg-light text-dark p-3 px-2 rounded w-100 start-0">
+                                    Non è nella lista delle parole
+                                </div>
+                            </transition>
                         </div>
                     </div>
                     <hr class="m-0">
@@ -197,6 +203,7 @@ export default {
             confirmSettingText: '',
             wordCounter: 1,
             showCopyToClipboardMsg: false,
+            showNoListWordMsg: false,
         };
     },
     async mounted() {
@@ -241,13 +248,20 @@ export default {
                 return;
             }
             if (key.toUpperCase() === 'INVIO') {
-                let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
-                if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
-                    this.visualizeScore(isWordGuessed);
-                }
-                else {
-                    this.currentTry += 1;
-                    this.canWrite = true;
+                if(this.game.state.words.includes(this.tryWords[this.currentTry])){
+                    let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
+                    if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
+                        this.visualizeScore(isWordGuessed);
+                    }
+                    else {
+                        this.currentTry += 1;
+                        this.canWrite = true;
+                    }
+                }else{
+                    this.showNoListWordMsg = true;
+                    setTimeout(() => {
+                        this.showNoListWordMsg = false;
+                    }, 2000);
                 }
             } else if (key.toUpperCase() === 'CANC') {
                 this.cancCharacter();
