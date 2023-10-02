@@ -88,29 +88,33 @@
                         </div>
                         <div v-else>
                             <h2 class="text-danger h1">CHE SFORTUNA!</h2>
-                            <p>Non sei riuscito ad indovinare la parola...</p>
+                            <p class="m-0">Non sei riuscito ad indovinare la parola...</p>
                         </div>
                     </div>
                     <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
                         class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole,
                         confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
-                        <div class="d-flex flex-column col-12 rounded p-2">
-                            <h2 class="text-center">INFORMAZIONI PARTITA</h2>
-                            <div class="d-flex col-12 gap-2">
-                                <div class="text-end col-6">
+                        <div class="d-flex flex-column align-items-center col-12 rounded py-4">
+                            <div class="d-flex flex-column align-items-center col-12">
+                                <div>
                                     Parola:
                                 </div>
-                                <div class="col-6 d-flex align-items-end flex-fill">
+                                <div class="fs-2 bg-success rounded-3 px-2">
                                     {{ this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase() }}
                                 </div>
                             </div>
-                            <div class="d-flex col-12 gap-2">
-                                <div class="text-end col-6">
-                                    Punti:
+                            <div class="col-6">
+                                <hr class="my-2">
+                            </div>
+                            <div class="d-flex flex-column align-items-center col-12">
+                                <div>
+                                    Punti[+{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}]:
                                 </div>
-                                <div class="col-6 d-flex align-items-end flex-fill">
-                                    {{ this.totalScore }} [+{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}]
+                                <div class="d-flex fs-2 bg-secondary rounded-3 overflow-hidden border">
+                                    <div v-for="(singleNumber, index) in String (totalScore).padStart (4, '0')" :class="{'border-end' : index + 1 < 4}" class="px-2">
+                                        {{ singleNumber }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
