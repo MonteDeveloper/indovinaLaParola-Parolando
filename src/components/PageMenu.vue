@@ -8,9 +8,9 @@
         <!-- PULSANTI -->
         <div class="d-flex justify-content-center align-items-center h-25">
             <div class="d-flex flex-column gap-3 justify-content-center">
-                <button class="btn btn-warning text-light fs-5 p-3 fw-bold" @click="openSettingsAlone = true"><i class="fa-solid fa-user"></i> GIOCA DA
+                <button class="btn btn-warning text-light fs-6 p-3 fw-bold" @click="openSettingsAlone = true"><i class="fa-solid fa-user"></i> GIOCA DA
                     SOLO</button>
-                <button class="btn btn-primary border border-light text-light text-light fs-5 p-3"
+                <button class="btn btn-primary border border-light text-light text-light fs-6 p-3"
                     @click="openSettingsChallenge = true"><i class="fa-solid fa-users"></i> SFIDA
                     UN AMICO</button>
             </div>
@@ -48,9 +48,9 @@
                                         :disabled="game.state.wordLength >= 8"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                            <button v-if="openSettingsChallenge" class="btn btn-light  fs-5 p-2 px-3"
+                            <button v-if="openSettingsChallenge" class="btn btn-light  fs-6 p-2 px-3"
                                 @click="nextSettingSlide">PROSSIMO</button>
-                            <button v-else class="btn btn-warning text-light fs-5 p-2 px-3"
+                            <button v-else class="btn btn-warning text-light fs-6 p-2 px-3"
                                 @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                                             class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                            <button class="btn btn-warning text-light fs-5 p-2 px-3 rounded-4" @click="goToGame()">CONFERMA</button>
+                            <button class="btn btn-warning text-light fs-6 p-2 px-3 rounded-4" @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
                 </transition>

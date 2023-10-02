@@ -10,7 +10,7 @@
                         <!-- <div>
                             Se indovini: +{{ this.game.state.wordLength - this.currentTry }}
                         </div> -->
-                        <div class="d-flex fs-5 gap-3">
+                        <div class="d-flex fs-6 gap-3">
                             <button
                                 @click="confirmSettingText = '1Vuoi tornare al menù principale? I dati e il punteggio di questa partita andranno persi'"
                                 class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-house"></i></button>
@@ -118,16 +118,16 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-center align-items-center gap-3">
-                        <button class="btn btn-secondary border border-light rounded-4 fs-5 p-2 px-3"
+                        <button class="btn btn-secondary border border-light rounded-4 fs-6 p-2 px-3"
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
                         <button
                             v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallengeMatch() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
                         <button
                             v-else-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3" @click="newChallengeGame()">NUOVA
+                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3" @click="newChallengeGame()">NUOVA
                             SFIDA</button>
                     </div>
                 </div>
@@ -147,14 +147,14 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-center align-items-center gap-3">
-                        <button class="btn btn-secondary border border-light rounded-4 fs-5 p-2 px-3"
+                        <button class="btn btn-secondary border border-light rounded-4 fs-6 p-2 px-3"
                             @click="confirmSettingText = ''">CONTINUA A GIOCARE</button>
 
                         <button v-if="confirmSettingText.substring(0, 1) == '1'"
-                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
-                            @click="this.$router.push({ path: '/' })">TORNA AL MENU PRINCIPALE</button>
+                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
+                            @click="this.$router.push({ path: '/' })">TORNA AL MENU</button>
                         <button v-if="confirmSettingText.substring(0, 1) == '2'"
-                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            class="btn btn-warning rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? newChallengeGame() : newSoloGame()">NUOVA {{ isChallengeMode ? 'SFIDA'
                                 : 'PARTITA' }}</button>
                     </div>
