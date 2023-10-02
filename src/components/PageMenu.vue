@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-around vh-100 position-relative container">
+    <div class="d-flex flex-column justify-content-center align-items-around vh-100 position-relative">
         <!-- LOGO -->
         <div class="d-flex justify-content-center align-items-center h-25 gap-2 fs-6">
             <div class="w-100 h-100 d-flex align-items-center">
@@ -19,18 +19,18 @@
         </div>
 
         <!-- IMPOSTAZIONI -->
-        <transition class="position-relative" name="fade-slide" mode="out-in">
+        <transition name="fade-slide" mode="out-in">
             <div v-if="openSettingsAlone || openSettingsChallenge"
-                class="bg-primary d-flex flex-column position-absolute rounded overflow-hidden p-3 h-50 w-100">
+                class="bg-primary d-flex flex-column rounded overflow-hidden p-3 h-50 position-absolute w-100">
                 <div class="w-100 d-flex justify-content-between">
                     <div class="col-6">
                         <Transition name="slidesx" mode="out-in">
-                            <button v-if="currentSettingSlide > 1" class="btn border text-light fs-4 px-4 m-2"
+                            <button v-if="currentSettingSlide > 1" class="btn border text-light fs-4 p-2 px-3 m-2"
                                 @click="previewSettingSlide"><i class="fa-solid fa-angle-left"></i></button>
                         </Transition>
                     </div>
                     <div class="col-6 d-flex justify-content-end">
-                        <button class="btn btn-danger text-light fs-4 px-4 m-2" @click="closeSettings"><i
+                        <button class="btn btn-danger text-light fs-4 p-2 px-3 m-2" @click="closeSettings"><i
                                 class="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
@@ -50,9 +50,9 @@
                                         :disabled="game.state.wordLength >= 8"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                            <button v-if="openSettingsChallenge" class="btn btn-light  fs-6 p-2 px-3"
+                            <button v-if="openSettingsChallenge" class="btn btn-light fs-6 p-2 px-3 rounded-4"
                                 @click="nextSettingSlide">PROSSIMO</button>
-                            <button v-else class="btn btn-warning text-light fs-6 p-2 px-3"
+                            <button v-else class="btn btn-warning text-light fs-6 p-2 px-3 rounded-4"
                                 @click="goToGame()">CONFERMA</button>
                         </div>
                     </div>
