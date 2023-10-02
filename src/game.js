@@ -32,7 +32,7 @@ const state = reactive({
 
 const actions = {
   async loadWords() {
-    const response = await axios.get('/1000_parole_italiane_comuni.txt');
+    const response = await axios.get('/60000_parole_italiane.txt');
     state.words = response.data.split('\n');
   },
   generateChallenge() {
