@@ -3,7 +3,24 @@
         <div class="d-flex flex-column justify-content-center align-items-center container-fluid gap-3 h-100">
             <div class="text-light col-12 d-flex flex-column justify-content-center align-items-center gap-3">
                 <div class="w-100 d-flex flex-column gap-1 justify-content-center">
-                    <div class="text-center py-3">
+                    <div class="d-flex justify-content-between w-100 py-3 align-items-center">
+                        <div>
+                            Punti: {{ this.totalScore }}
+                        </div>
+                        <div>
+                            Se indovini: +{{ this.game.state.wordLength - this.currentTry }}
+                        </div>
+                        <div class="d-flex gap-3 fs-5">
+                            <button
+                                @click="confirmSettingText = '1Vuoi tornare al menù principale? I dati e il punteggio di questa partita andranno persi'"
+                                class="text-light bg-dark border-0"><i class="fa-solid fa-house"></i></button>
+                            <button
+                                @click="confirmSettingText = '2Vuoi cominciare una nuova partita da zero? I dati e il punteggio di questa partita andranno persi'"
+                                class="text-light bg-dark border-0"><i class="fa-solid fa-rotate-left"></i></button>
+                        </div>
+                    </div>
+                    <hr class="m-0">
+                    <div class="text-center pb-3">
                         <div v-if="isChallengeMode">
                             <h1 class="display-1">MODALITA' SFIDA</h1>
                             <p class="m-0">Ancora {{ this.game.state.wordsToGuess.length - this.currentIndexWordToGuess }}
@@ -12,6 +29,7 @@
                         </div>
                         <div v-else>
                             <h1 class="display-1">SOLITARIA</h1>
+                            <p class="m-0">Riuscirai ad indovinare la {{ this.wordCounter }} parola?</p>
                         </div>
                     </div>
                     <div class="w-100" :class="{ 'opacity-25 ': currentTry < tryWordIndex }"
@@ -59,7 +77,9 @@
                             <p>Non sei riuscito ad indovinare la parola, ma puoi sempre riprovare con un'altra</p>
                         </div>
                     </div>
-                    <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole, confronta i punteggi con i tuoi amici :)</p>
+                    <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
+                        class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole,
+                        confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column col-12 rounded p-2">
                             <h2 class="text-center">INFORMAZIONI PARTITA</h2>
@@ -92,9 +112,44 @@
                     <div class="w-100 d-flex justify-content-center align-items-center gap-3">
                         <button class="btn btn-secondary border border-light rounded-4 fs-5 p-2 px-3"
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
-                        <button v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]" class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
-                            @click="isChallengeMode ? prepareForNextChallenge() : prepareForNextSolo()">PROSSIMA
+                        <button
+                            v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
+                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            @click="isChallengeMode ? prepareForNextChallengeMatch() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
+                        <button
+                            v-else-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
+                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3" @click="newChallengeGame()">NUOVA
+                            SFIDA</button>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="confirmSettingText.length > 0"
+                class="position-absolute top-50 start-50 translate-middle w-100 text-light">
+                <div class="bg-primary d-flex flex-column rounded overflow-hidden p-3">
+                    <div class="w-100 d-flex justify-content-center align-items-center text-center">
+                        <div>
+                            <h2 class="text-danger h1">ATTENZIONE!</h2>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex justify-content-center align-items-center h-100">
+                        <div class="d-flex flex-column col-12 rounded p-2">
+                            <p class="text-center py-3">{{ isChallengeMode ?
+                                confirmSettingText.substring(1).replace(/partita/g, 'sfida') :
+                                confirmSettingText.substring(1) }}</p>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex justify-content-center align-items-center gap-3">
+                        <button class="btn btn-secondary border border-light rounded-4 fs-5 p-2 px-3"
+                            @click="confirmSettingText = ''">CONTINUA A GIOCARE</button>
+
+                        <button v-if="confirmSettingText.substring(0, 1) == '1'"
+                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            @click="this.$router.push({ path: '/' })">TORNA AL MENU PRINCIPALE</button>
+                        <button v-if="confirmSettingText.substring(0, 1) == '2'"
+                            class="btn btn-warning rounded-4 text-light fs-5 p-2 px-3"
+                            @click="isChallengeMode ? newChallengeGame() : newSoloGame()">NUOVA {{ isChallengeMode ? 'SFIDA'
+                                : 'PARTITA' }}</button>
                     </div>
                 </div>
             </div>
@@ -129,6 +184,8 @@ export default {
             totalScore: 0,
             tryPointsMoltiplicator: 1,
             sendedLastTry: false,
+            confirmSettingText: '',
+            wordCounter: 1,
         };
     },
     async mounted() {
@@ -233,13 +290,13 @@ export default {
                 this.sendedLastTry = false;
                 this.matchGuessed = isWordGuessed;
                 this.endMatch = true;
-                if(this.matchGuessed){
+                if (this.matchGuessed) {
                     this.totalScore += this.game.state.wordLength - this.currentTry;
                 }
             }, delay);
         },
 
-        prepareForNextChallenge() {
+        prepareForNextChallengeMatch() {
             this.endMatch = false;
             this.currentIndexWordToGuess += 1;
             this.guessedLetters = [];
@@ -253,8 +310,17 @@ export default {
             this.lettersNoInTheWord = '';
             this.currentTry = 0;
             this.canWrite = true;
+            this.confirmSettingText = '';
+        },
+        newChallengeGame() {
+            let randomChallenge = Math.floor(Math.random() * 900000) + 100000;
+            this.$router.push({ path: '/game', query: { challenge: randomChallenge, letters: this.game.state.wordLength, challengeLength: this.game.state.challengeLength } });
+        },
+        newSoloGame() {
+            this.$router.go(0);
         },
         prepareForNextSolo() {
+            this.wordCounter += 1;
             this.endMatch = false;
             this.game.actions.generateOneGame();
             this.guessedLetters = [];
@@ -268,6 +334,7 @@ export default {
             this.currentTry = 0;
             this.lettersNoInTheWord = '';
             this.canWrite = true;
+            this.confirmSettingText = '';
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
             const currentLetter = this.tryWords[tryWordIndex][letterIndex - 1];
@@ -283,7 +350,7 @@ export default {
 
                 if ((this.canWrite && this.tryWords[tryWordIndex].length >= this.game.state.wordLength) ||
                     !this.canWrite && this.tryWords[tryWordIndex + 1] && this.tryWords[tryWordIndex + 1].length >= this.game.state.wordLength ||
-                    this.sendedLastTry){
+                    this.sendedLastTry) {
                     thisTryIsCompleted = true;
                 }
 
@@ -375,6 +442,5 @@ export default {
 
 .blockTransitionDelay {
     transition-delay: 0s !important;
-}
-</style>
+}</style>
 
