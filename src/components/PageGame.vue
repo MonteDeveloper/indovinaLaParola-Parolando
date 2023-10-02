@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                        class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parole,
+                        class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parol{{ this.currentIndexWordToGuess + 1 > 1 ? 'e' : 'a' }},
                         confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column align-items-center col-12 rounded py-4">
