@@ -17,8 +17,8 @@
                             <button
                                 @click="confirmSettingText = '2Vuoi cominciare una nuova partita da zero? I dati e il punteggio di questa partita andranno persi'"
                                 class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-rotate-left"></i></button>
-                            <button v-if="isChallengeMode" @click="shareChallenge()" class="text-light bg-dark border-0 p-0"><i
-                                    class="fa-solid fa-user-plus"></i></button>
+                            <button v-if="isChallengeMode" @click="shareChallenge()"
+                                class="text-light bg-dark border-0 p-0"><i class="fa-solid fa-user-plus"></i></button>
                             <transition name="fade-slide" mode="out-in">
                                 <div v-if="showCopyToClipboardMsg"
                                     class="position-absolute text-center bg-light text-dark p-3 px-2 rounded w-100 start-0">
@@ -92,7 +92,8 @@
                         </div>
                     </div>
                     <p v-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
-                        class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parol{{ this.currentIndexWordToGuess + 1 > 1 ? 'e' : 'a' }},
+                        class="text-center">Hai terminato la sfida da {{ this.currentIndexWordToGuess + 1 }} parol{{
+                            this.currentIndexWordToGuess + 1 > 1 ? 'e' : 'a' }},
                         confronta i punteggi con i tuoi amici :)</p>
                     <div class="w-100 d-flex justify-content-center align-items-center h-100">
                         <div class="d-flex flex-column align-items-center col-12 rounded py-4">
@@ -112,7 +113,8 @@
                                     Punti[+{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}]:
                                 </div>
                                 <div class="d-flex fs-2 bg-secondary rounded-3 overflow-hidden border">
-                                    <div v-for="(singleNumber, index) in String (totalScore).padStart (4, '0')" :class="{'border-end' : index + 1 < 4}" class="px-2">
+                                    <div v-for="(singleNumber, index) in String(totalScore).padStart(4, '0')"
+                                        :class="{ 'border-end': index + 1 < 4 }" class="px-2">
                                         {{ singleNumber }}
                                     </div>
                                 </div>
@@ -164,8 +166,14 @@
             </div>
         </transition>
     </div>
+    <div v-else class="my-personalHeight text-light d-flex gap-2">
+        <div v-for="(letter, index) in 'LOADING'" class="d-flex align-items-center justify-content-center w-100 loading">
+            <span class="d-flex align-items-center justify-content-center m-0 rounded-1 ratio ratio-1x1 fw-bold" :style="{ animationDelay: index/7 + 's' }">{{ letter }}</span>
+        </div>
+    </div>
     <transition name="fade" mode="out-in">
-        <div v-if="endMatch || confirmSettingText.length > 0" class="position-absolute vh-100 w-100 start-0 top-0 blackOverlay"></div>
+        <div v-if="endMatch || confirmSettingText.length > 0"
+            class="position-absolute vh-100 w-100 start-0 top-0 blackOverlay"></div>
     </transition>
 </template>
 
@@ -244,7 +252,7 @@ export default {
                 return;
             }
             if (key.toUpperCase() === 'INVIO') {
-                if(this.game.state.words.includes(this.tryWords[this.currentTry]) || this.game.state.moreWords.includes(this.tryWords[this.currentTry])){
+                if (this.game.state.words.includes(this.tryWords[this.currentTry]) || this.game.state.moreWords.includes(this.tryWords[this.currentTry])) {
                     let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
                     if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
                         this.visualizeScore(isWordGuessed);
@@ -253,7 +261,7 @@ export default {
                         this.currentTry += 1;
                         this.canWrite = true;
                     }
-                }else{
+                } else {
                     this.showNoListWordMsg = true;
                     setTimeout(() => {
                         this.showNoListWordMsg = false;
@@ -430,6 +438,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../scss/bootstrap_custom.scss';
+.loading span {
+  animation: loading 1.4s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1);
+    background-color: $primary;
+  }
+  50% {
+    transform: scale(.9);
+    background-color: $success;
+  }
+  100%{
+    transform: scale(1);
+    background-color: $primary;
+  }
+}
+
+
 .my-personalHeight {
     height: 100vh;
     height: 100dvh;
@@ -480,12 +509,12 @@ export default {
     transition-delay: 0s !important;
 }
 
-.blackOverlay{
+.blackOverlay {
     z-index: 999;
     background-color: rgba(0, 0, 0, .5)
 }
 
-.zIndexPrimary{
+.zIndexPrimary {
     z-index: 9999;
 }
 </style>
