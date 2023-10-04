@@ -110,7 +110,7 @@
                             </div>
                             <div class="d-flex flex-column align-items-center col-12">
                                 <div>
-                                    Punti[+{{ this.matchGuessed ? this.game.state.wordLength - this.currentTry : 0 }}]:
+                                    Punti<span v-if="this.matchGuessed">[+{{  this.game.state.wordLength - this.currentTry }}]</span>:
                                 </div>
                                 <div class="d-flex fs-2 bg-secondary rounded-3 overflow-hidden border">
                                     <div v-for="(singleNumber, index) in String(totalScore).padStart(4, '0')"
@@ -125,10 +125,14 @@
                         <button class="btn btn-secondary border border-light rounded-4 fs-6 p-2 px-3"
                             @click="this.$router.push({ path: '/' });">TORNA AL MENU</button>
                         <button
-                            v-if="!isChallengeMode || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
+                            v-if="!isChallengeMode && this.matchGuessed || isChallengeMode && this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
                             class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallengeMatch() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
+                        <button
+                            v-if="!isChallengeMode && !this.matchGuessed"
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
+                            @click="prepareForNextSolo()">NUOVA PARTITA</button>
                         <button
                             v-else-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
                             class="btn btn-success rounded-4 text-light fs-6 p-2 px-3" @click="newChallengeGame()">NUOVA
@@ -168,7 +172,8 @@
     </div>
     <div v-else class="my-personalHeight text-light d-flex gap-2">
         <div v-for="(letter, index) in 'LOADING'" class="d-flex align-items-center justify-content-center w-100 loading">
-            <span class="d-flex align-items-center justify-content-center m-0 rounded-1 ratio ratio-1x1 fw-bold" :style="{ animationDelay: index/7 + 's' }">{{ letter }}</span>
+            <span class="d-flex align-items-center justify-content-center m-0 rounded-1 ratio ratio-1x1 fw-bold"
+                :style="{ animationDelay: index / 7 + 's' }">{{ letter }}</span>
         </div>
     </div>
     <transition name="fade" mode="out-in">
@@ -364,6 +369,10 @@ export default {
             this.lettersNoInTheWord = '';
             this.canWrite = true;
             this.confirmSettingText = '';
+            if(!this.matchGuessed){
+                this.totalScore = 0;
+                this.wordCounter = 1;
+            }
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
             const currentLetter = this.tryWords[tryWordIndex][letterIndex - 1];
@@ -439,23 +448,26 @@ export default {
 
 <style lang="scss" scoped>
 @import '../scss/bootstrap_custom.scss';
+
 .loading span {
-  animation: loading 1.4s infinite;
+    animation: loading 1.4s infinite;
 }
 
 @keyframes loading {
-  0% {
-    transform: scale(1);
-    background-color: $primary;
-  }
-  50% {
-    transform: scale(.9);
-    background-color: $success;
-  }
-  100%{
-    transform: scale(1);
-    background-color: $primary;
-  }
+    0% {
+        transform: scale(1);
+        background-color: $primary;
+    }
+
+    50% {
+        transform: scale(.9);
+        background-color: $success;
+    }
+
+    100% {
+        transform: scale(1);
+        background-color: $primary;
+    }
 }
 
 
@@ -516,6 +528,5 @@ export default {
 
 .zIndexPrimary {
     z-index: 9999;
-}
-</style>
+}</style>
 
