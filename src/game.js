@@ -36,7 +36,7 @@ const actions = {
     const wordsCommon = await axios.get('/1800_parole_italiane_comuni.txt');
     const otherWords = await axios.get('/660000_parole_italiane.txt');
     state.words = wordsCommon.data.split('\n').filter(word => word.length >= state.minLetters && word.length <= state.maxLetters);
-    state.moreWords = otherWords.data.split('\r\n').filter(word => word.length >= state.minLetters && word.length <= state.maxLetters);
+    state.moreWords = otherWords.data.split('\n').filter(word => word.length >= state.minLetters && word.length <= state.maxLetters);
     console.log(state.moreWords);
   },
   generateChallenge() {
