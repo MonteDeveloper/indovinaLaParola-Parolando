@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container position-relative">
     <router-view :key="$route.fullPath"/>
   </div>
 </template>

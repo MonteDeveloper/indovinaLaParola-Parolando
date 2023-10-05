@@ -110,7 +110,8 @@
                             </div>
                             <div class="d-flex flex-column align-items-center col-12">
                                 <div>
-                                    Punti<span v-if="this.matchGuessed">[+{{  this.game.state.wordLength - this.currentTry }}]</span>:
+                                    Punti<span v-if="this.matchGuessed">[+{{ this.game.state.wordLength - this.currentTry
+                                    }}]</span>:
                                 </div>
                                 <div class="d-flex fs-2 bg-secondary rounded-3 overflow-hidden border">
                                     <div v-for="(singleNumber, index) in String(totalScore).padStart(4, '0')"
@@ -129,10 +130,9 @@
                             class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
                             @click="isChallengeMode ? prepareForNextChallengeMatch() : prepareForNextSolo()">PROSSIMA
                             PAROLA</button>
-                        <button
-                            v-if="!isChallengeMode && !this.matchGuessed"
-                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3"
-                            @click="prepareForNextSolo()">NUOVA PARTITA</button>
+                        <button v-if="!isChallengeMode && !this.matchGuessed"
+                            class="btn btn-success rounded-4 text-light fs-6 p-2 px-3" @click="prepareForNextSolo()">NUOVA
+                            PARTITA</button>
                         <button
                             v-else-if="isChallengeMode && !this.game.state.wordsToGuess[this.currentIndexWordToGuess + 1]"
                             class="btn btn-success rounded-4 text-light fs-6 p-2 px-3" @click="newChallengeGame()">NUOVA
@@ -170,12 +170,17 @@
             </div>
         </transition>
     </div>
-    <div v-else class="my-personalHeight text-light d-flex gap-2">
-        <div v-for="(letter, index) in 'LOADING'" class="d-flex align-items-center justify-content-center w-100 loading">
-            <span class="d-flex align-items-center justify-content-center m-0 rounded-1 ratio ratio-1x1 fw-bold"
-                :style="{ animationDelay: index / 7 + 's' }">{{ letter }}</span>
+    <transition name="loading-transition">
+        <div v-if="!wordsLoaded"
+            class="my-personalHeight text-light d-flex gap-2 position-absolute top-0 start-0 w-100 px-3 bg-dark">
+            <div v-for="(letter, index) in 'LOADING'"
+                class="d-flex align-items-center justify-content-center w-100 loading">
+                <span class="d-flex align-items-center justify-content-center m-0 rounded-1 ratio ratio-1x1 fw-bold"
+                    :style="{ animationDelay: index / 7 + 's' }">{{ letter }}</span>
+            </div>
         </div>
-    </div>
+    </transition>
+
     <transition name="fade" mode="out-in">
         <div v-if="endMatch || confirmSettingText.length > 0"
             class="position-absolute vh-100 w-100 start-0 top-0 blackOverlay"></div>
@@ -369,7 +374,7 @@ export default {
             this.lettersNoInTheWord = '';
             this.canWrite = true;
             this.confirmSettingText = '';
-            if(!this.matchGuessed){
+            if (!this.matchGuessed) {
                 this.totalScore = 0;
                 this.wordCounter = 1;
             }
@@ -528,5 +533,6 @@ export default {
 
 .zIndexPrimary {
     z-index: 9999;
-}</style>
+}
+</style>
 
