@@ -262,8 +262,8 @@ export default {
                 return;
             }
             if (key.toUpperCase() === 'INVIO') {
-                if (this.game.state.words.includes(this.tryWords[this.currentTry]) || this.game.state.moreWords.includes(this.tryWords[this.currentTry])) {
-                    let isWordGuessed = this.checkGuessWord(this.tryWords[this.currentTry]);
+                if (this.game.state.words.includes(currentWord) || this.game.state.moreWords.includes(currentWord)) {
+                    let isWordGuessed = this.checkGuessWord(currentWord);
                     if (this.currentTry + 1 >= this.tryWords.length || isWordGuessed) {
                         this.visualizeScore(isWordGuessed);
                     }
@@ -381,7 +381,6 @@ export default {
         },
         calculateSquareClass(letterIndex, tryWordIndex) {
             const currentLetter = this.tryWords[tryWordIndex][letterIndex - 1];
-            console.log(currentLetter);
             if (currentLetter) {
                 const currentLetterUpperCase = currentLetter.toUpperCase();
                 const wordToGuess = this.removeAccents(this.game.state.wordsToGuess[this.currentIndexWordToGuess].toUpperCase());
