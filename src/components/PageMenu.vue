@@ -3,7 +3,7 @@
         <!-- LOGO -->
         <div class="d-flex justify-content-center align-items-center h-25 gap-2 fs-6">
             <div class="w-100 h-100 d-flex align-items-center">
-                <img class="img-fluid bounce" src="/logo.png" alt="">
+                <img class="img-fluid bounce" src="https://schmidtparmaimages.s3.eu-north-1.amazonaws.com/kitchens/classic/ARAGON+N-%C2%A65_0010+OK.jpg" alt="logo">
             </div>
         </div>
 
